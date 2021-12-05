@@ -11,8 +11,8 @@ on:
       - synchronize
 
 jobs:
-  test:
-    name: node@16
+  build:
+    name: Test project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
