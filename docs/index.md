@@ -45,10 +45,3 @@ Then configure your `tsconfig.json` file if you want metadata and type reflectio
 	}
 }
 ```
-
-Finally, import the package at the top of your project's entry file. This will automatically import the required
-`reflect-metadata` package behind the scenes.
-
-```ts
-import '@baileyherbert/reflection';
-```

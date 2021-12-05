@@ -36,21 +36,18 @@ const objects = types.map(type => new type());
 const instance = reflection.create(objects);
 ```
 
-Perhaps you're a fan metadata? Just use the included `@Meta()` decorator!
+Perhaps you're a fan of metadata? Just use the included `@Meta()` decorator!
 
 ```ts
 import { Meta } from '@baileyherbert/reflection';
-
 const Custom = (value: any) => Meta('key', value);
 
 @Meta('key', 'value')
 export class Example {
-
 	@Custom('value')
 	public method() {
 
 	}
-
 }
 ```
 
@@ -71,13 +68,6 @@ Then configure your `tsconfig.json` file as follows if you want metadata and typ
 		"emitDecoratorMetadata": true,
 	}
 }
-```
-
-Finally, import the package at the top of your project's entry file. This will automatically import the required
-`reflect-metadata` package behind the scenes.
-
-```ts
-import '@baileyherbert/reflection';
 ```
 
 ## Documentation

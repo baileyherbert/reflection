@@ -2,6 +2,10 @@
 
 ## Retrieving an instance
 
+Retrieve an instance from the parent method using [`getParameter()`](methods.md#method:getParameter) or
+[`getParameters()`](methods.md#method:getParameters). It is not possible to manually instantiate a reflection
+parameter.
+
 ## Properties
 
 ### `#!ts method: ReflectionMethod` { data-toc-label="method", id="property:method" }
