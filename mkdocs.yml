@@ -1,0 +1,82 @@
+site_name: Reflection
+site_url: https://docs.bailey.sh/reflection/
+site_author: Bailey Herbert
+site_description: >-
+  Lightweight reflection for TypeScript.
+
+repo_name: baileyherbert/reflection
+repo_url: https://github.com/baileyherbert/reflection
+edit_uri: ""
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  features:
+    - navigation.top
+    - navigation.tracking
+    - navigation.sections
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - assets/styles.css
+
+markdown_extensions:
+  - attr_list
+  - toc:
+      permalink: True
+      separator: "_"
+  - admonition
+  - footnotes
+  - pymdownx.superfences
+  - pymdownx.saneheaders
+  - pymdownx.tabbed
+  - pymdownx.inlinehilite
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+nav:
+  - Introduction: index.md
+  - Reference:
+    - Classes: reference/classes.md
+    - Methods: reference/methods.md
+    - Parameters: reference/parameters.md
+  - Decorators:
+    - Meta: decorators/Meta.md
+    - Reflectable: decorators/Reflectable.md
+  - Enums:
+    - MethodFilter: enums/MethodFilter.md
+    - ParameterFilter: enums/ParameterFilter.md
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+extra:
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/baileyherbert
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/u/baileyherbert

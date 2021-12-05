@@ -1,0 +1,27 @@
+name: release
+
+on:
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: node@16
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install
+      - run: npm test
+      - run: npm run build
+      - id: get_version
+        uses: battila7/get-version-action@v2
+      - run: npm version ${{ steps.get_version.outputs.version-without-v }}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

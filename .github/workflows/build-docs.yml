@@ -1,0 +1,51 @@
+name: build-docs
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - created
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork == false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - run: |
+          pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
+          pip install mike
+          pip install mkdocs-minify-plugin
+
+      - id: get_version
+        uses: battila7/get-version-action@v2
+
+      - name: Set user
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - run: git fetch origin gh-pages --depth=1
+        continue-on-error: true
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - if: steps.get_version.outputs.is-semver != 'true'
+        run: mike deploy --push ${{ steps.extract_branch.outputs.branch }}
+
+      - if: steps.get_version.outputs.is-semver == 'true'
+        run: |
+          mike deploy ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} latest --update-aliases --no-redirect
+          mike set-default --push latest
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
