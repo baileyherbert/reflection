@@ -11,7 +11,14 @@
 	"files": [
 		"dist/**/*"
 	],
-	"keywords": [],
+	"keywords": [
+		"typescript",
+		"reflection",
+		"metadata",
+		"reflect",
+		"decorator",
+		"decorators"
+	],
 	"scripts": {
 		"dev": "ts-node-dev --respawn --rs src/main.ts",
 		"build": "rimraf dist && tsc",
