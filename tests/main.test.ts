@@ -5,6 +5,7 @@ describe('main', function() {
 		expect(typeof Main.Reflectable).toBe('function');
 		expect(typeof Main.ReflectionClass).toBe('function');
 		expect(typeof Main.ReflectionMethod).toBe('function');
+		expect(typeof Main.ReflectionParameter).toBe('function');
 		expect(typeof Main.MethodFilter).toBe('object');
 		expect(typeof Main.ParameterFilter).toBe('object');
 	})
