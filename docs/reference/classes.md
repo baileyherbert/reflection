@@ -105,7 +105,7 @@ reflect.getMethod('constructor');
 
 ## Managing metadata
 
-These methods use the `reflect-metadata` library under the hood. You can use the [`@Meta`](../decorators/meta.md)
+These methods use the `reflect-metadata` library under the hood. You can use the [`@Meta`](../decorators/Meta.md)
 decorator built into this package, or refer to the
 [TypeScript Handbook on Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html), to set metadata on
 your classes.
