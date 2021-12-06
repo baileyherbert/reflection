@@ -7,7 +7,7 @@ upon this decorator to easily create your own metadata decorators without any of
 
 ### `#!ts @Meta(key: any, value: any)` { data-toc-label="@Meta()", id="variation:smart" }
 
-> Returns a metadata decorator that can be applied to classes, methods, and decorators. This is the one you'll want to
+> Returns a metadata decorator that can be applied to classes, methods, and parameters. This is the one you'll want to
 > use in practice – the rest are mainly for building upon.
 >
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
