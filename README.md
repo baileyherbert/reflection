@@ -15,9 +15,9 @@ import { ClassName } from './ClassName';
 const reflection = new ReflectionClass(ClassName);
 
 if (reflection.hasMetadata('key')) {
-	for (const method of reflection.getMethods()) {
-		const params = method.getParameters();
-	}
+    for (const method of reflection.getMethods()) {
+        const params = method.getParameters();
+    }
 }
 ```
 
@@ -44,10 +44,10 @@ const Custom = (value: any) => Meta('key', value);
 
 @Meta('key', 'value')
 export class Example {
-	@Custom('value')
-	public method() {
+    @Custom('value')
+    public method() {
 
-	}
+    }
 }
 ```
 
@@ -63,10 +63,10 @@ Then configure your `tsconfig.json` file as follows if you want metadata and typ
 
 ```json
 {
-	"compilerOptions": {
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-	}
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+    }
 }
 ```
 
