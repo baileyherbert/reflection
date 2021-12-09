@@ -96,7 +96,7 @@ describe('ReflectionMethod', function() {
 		const test = calculateLengthMethod.getAllMetadata();
 
 		expect(typeof test === 'object').toBe(true);
-		expect(test.example).toBe(false);
+		expect(test.get('example')).toBe(false);
 
 		expect(calculateLengthMethod.hasMetadata('design:returntype')).toBe(true);
 		expect(calculateLengthMethod.hasMetadata('reflection:params')).toBe(true);

@@ -1,4 +1,5 @@
 import { ParameterFilter } from '../main';
+import { ParameterFilter } from '../enums/ParameterFilter';
 import { ParameterParser } from '../utilities/ParameterParser';
 import { ReflectionClass } from './ReflectionClass';
 import { ReflectionParameter } from './ReflectionParameter';
@@ -295,10 +296,10 @@ export class ReflectionMethod<T> {
 		}
 
 		const keys = Reflect.getMetadataKeys(this._proto, this.name);
-		const result: Record<any, any> = {};
+		const result = new Map<any, any>();
 
 		for (const key of keys) {
-			result[key] = Reflect.getMetadata(key, this._proto, this.name);
+			result.set(key, Reflect.getMetadata(key, this._proto, this.name));
 		}
 
 		return result;

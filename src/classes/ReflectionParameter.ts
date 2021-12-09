@@ -171,10 +171,10 @@ export class ReflectionParameter<T> {
 		const map = this.getMetadataMap();
 
 		const keys = map.keys();
-		const result: Record<string, any> = {};
+		const result = new Map<any, any>();
 
 		for (const key of keys) {
-			result[key] = map.get(key);
+			result.set(key, map.get(key));
 		}
 
 		return result;

@@ -62,6 +62,7 @@ describe('ReflectionParameter', function() {
 		expect(inputParam.hasMetadata('test')).toBe(true);
 		expect(inputParam.getMetadata('test')).toBe(123);
 		expect(constructorParam.getMetadata('test')).toBe(true);
+		expect(inputParam.getAllMetadata().get('test')).toBe(123);
 	});
 
 	it('can write metadata', function() {
