@@ -2,6 +2,10 @@ import { Type } from '@baileyherbert/types';
 import { MethodFilter } from '../enums/MethodFilter';
 import { ReflectionMethod } from './ReflectionMethod';
 
+// @ts-ignore
+const isBrowser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+const customInspectSymbol = isBrowser ? Symbol() : require('util').inspect.custom;
+
 /**
  * This utility class is used to work with reflection on a class.
  *
@@ -286,6 +290,23 @@ export class ReflectionClass<T> {
 	 */
 	public get parent() {
 		return this._parent;
+	}
+
+	/**
+	 * Custom inspect method.
+	 *
+	 * @param depth
+	 * @param opts
+	 * @returns
+	 */
+	private [customInspectSymbol](depth: number, opts: object) {
+		return {
+			name: this.name,
+			ref: this.ref,
+			parent: this.parent,
+			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
+			methods: this.getMethods()
+		};
 	}
 
 }

@@ -1,6 +1,9 @@
-import { Type } from '@baileyherbert/types';
 import { ExtractedParameter } from '../utilities/ParameterParser';
 import { ReflectionMethod } from './ReflectionMethod';
+
+// @ts-ignore
+const isBrowser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+const customInspectSymbol = isBrowser ? Symbol() : require('util').inspect.custom;
 
 export class ReflectionParameter<T> {
 
@@ -197,6 +200,26 @@ export class ReflectionParameter<T> {
 	 */
 	public hasMetadata(name: any) {
 		return this.getMetadataMap().has(name);
+	}
+
+	/**
+	 * Custom inspect method.
+	 *
+	 * @param depth
+	 * @param opts
+	 * @returns
+	 */
+	private [customInspectSymbol](depth: number, opts: object) {
+		return {
+			index: this.index,
+			name: this.name,
+			type: this.getType(),
+			typeString: this.getTypeString(),
+			isPrimitiveType: this.isPrimitiveType,
+			isClassType: this.isClassType,
+			isKnownType: this.isKnownType,
+			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v})))
+		};
 	}
 
 }

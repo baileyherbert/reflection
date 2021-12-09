@@ -1,8 +1,11 @@
-import { ParameterFilter } from '../main';
 import { ParameterFilter } from '../enums/ParameterFilter';
 import { ParameterParser } from '../utilities/ParameterParser';
 import { ReflectionClass } from './ReflectionClass';
 import { ReflectionParameter } from './ReflectionParameter';
+
+// @ts-ignore
+const isBrowser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+const customInspectSymbol = isBrowser ? Symbol() : require('util').inspect.custom;
 
 export class ReflectionMethod<T> {
 
@@ -330,6 +333,25 @@ export class ReflectionMethod<T> {
 		}
 
 		return Reflect.hasMetadata(name, this._proto, this.name);
+	}
+
+	/**
+	 * Custom inspect method.
+	 *
+	 * @param depth
+	 * @param opts
+	 * @returns
+	 */
+	private [customInspectSymbol](depth: number, opts: object) {
+		return {
+			name: this.name,
+			isTyped: this.isTyped,
+			isStatic: this.isStatic,
+			returnType: this.getReturnType(),
+			returnTypeString: this.getReturnTypeString(),
+			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
+			parameters: this.getParameters()
+		};
 	}
 
 }
