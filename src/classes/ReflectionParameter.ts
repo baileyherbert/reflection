@@ -5,7 +5,7 @@ import { ReflectionMethod } from './ReflectionMethod';
 const isBrowser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 const customInspectSymbol = isBrowser ? Symbol() : require('util').inspect.custom;
 
-export class ReflectionParameter<T> {
+export class ReflectionParameter<T = unknown> {
 
 	private _method: ReflectionMethod<T>;
 	private _schema: ExtractedParameter;

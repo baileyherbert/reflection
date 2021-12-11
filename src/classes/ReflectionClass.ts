@@ -13,7 +13,7 @@ const customInspectSymbol = isBrowser ? Symbol() : require('util').inspect.custo
  * must also apply at least one decorator to the class. If you need to, use the `@Reflectable()` decorator provided by
  * this library.
  */
-export class ReflectionClass<T> {
+export class ReflectionClass<T = unknown> {
 
 	/**
 	 * The class constructor function.
