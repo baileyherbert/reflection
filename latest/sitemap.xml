@@ -2,47 +2,57 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/decorators/Meta/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/decorators/Reflectable/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/enums/MethodFilter/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/enums/ParameterFilter/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.bailey.sh/reflection/1.0/enums/PropertyFilter/</loc>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/internals/parameter-metadata/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/reference/classes/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/reference/methods/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/1.0/reference/parameters/</loc>
-         <lastmod>2021-12-09</lastmod>
+         <lastmod>2021-12-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.bailey.sh/reflection/1.0/reference/properties/</loc>
+         <lastmod>2021-12-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
