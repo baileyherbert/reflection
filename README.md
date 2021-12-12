@@ -4,9 +4,32 @@ This is a reflection library for TypeScript!
 
 Do you hate writing decorators but love their power? How about all the work required to get the type a method returns
 or a parameter expects? This library makes it simple to write decorators, and to access metadata and type information
-from classes, methods, and parameters.
+from classes, methods, properties, and parameters.
 
-## Take a tour
+## Getting started
+
+Install the package into your project:
+
+```plain
+npm install @baileyherbert/reflection
+```
+
+Then configure your `tsconfig.json` file as follows if you want metadata and type reflection:
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+    }
+}
+```
+
+## Documentation
+
+Check out the **[documentation website](https://docs.bailey.sh/reflection/latest/)**.
+
+## Examples
 
 Check out this pointless example:
 
@@ -50,26 +73,3 @@ export class Example {
     }
 }
 ```
-
-## Getting started
-
-Install the package into your project:
-
-```plain
-npm install @baileyherbert/reflection
-```
-
-Then configure your `tsconfig.json` file as follows if you want metadata and type reflection:
-
-```json
-{
-    "compilerOptions": {
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-    }
-}
-```
-
-## Documentation
-
-Check out the [documentation website](https://docs.bailey.sh/reflection/)!
