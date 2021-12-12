@@ -5,8 +5,17 @@ import { ParentClass } from './ParentClass';
 @Meta('example', true)
 export class ChildClass extends ParentClass {
 
+	@Meta('test', 'propA')
+	public propA: number;
+
+	@Meta.Property('another_test', 'propB')
+	public propB: boolean;
+
 	public constructor(@Meta('test', true) public someRandomValue: string = 'Not provided') {
 		super();
+
+		this.propA = 1;
+		this.propB = true;
 	}
 
 	public override overloadedMethod() {

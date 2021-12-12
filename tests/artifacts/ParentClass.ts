@@ -1,7 +1,10 @@
-import { Reflectable } from '../../src/main';
+import { Meta, Reflectable } from '../../src/main';
 
 @Reflectable
 export class ParentClass {
+
+	@Meta.Property('parent_test', 'propC')
+	public propC: string = 'Hello world!';
 
 	@Reflectable
 	public overloadedMethod(): number {

@@ -54,6 +54,21 @@ export class Example {
 }
 ```
 
+### `#!ts @Meta.Property(key: any, value: any)` { data-toc-label="@Meta.Property()", id="variation:property" }
+
+> Returns a metadata decorator that can be applied to only properties.
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+export class Example {
+
+	@Meta.Property('key', 'value')
+	public prop: string;
+
+}
+```
+
 ### `#!ts @Meta.Parameter(key: any, value: any)` { data-toc-label="@Meta.Parameter()", id="variation:parameter" }
 
 > Returns a metadata decorator that can be applied to only parameters.

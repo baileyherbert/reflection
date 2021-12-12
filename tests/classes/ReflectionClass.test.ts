@@ -1,4 +1,4 @@
-import { MethodFilter, ReflectionClass } from '../../src/main';
+import { MethodFilter, PropertyFilter, ReflectionClass } from '../../src/main';
 import { ChildClass } from '../artifacts/ChildClass';
 import { ParentClass } from '../artifacts/ParentClass';
 
@@ -109,6 +109,15 @@ describe('ReflectionClass', function() {
 		expect(params[0].name).toBe('someRandomValue');
 		expect(params[0].getTypeString()).toBe('string');
 		expect(reflect.getConstructorMethod()).toBe(method);
+	});
+
+	it('can retrieve properties', function() {
+		expect(reflect.getProperties().length).toBe(3);
+		expect(reflect.getProperties(PropertyFilter.Inherited).length).toBe(1);
+		expect(reflect.getProperties(PropertyFilter.Own).length).toBe(2);
+
+		expect(reflect.getProperties(PropertyFilter.Inherited).map(p => p.name)).toEqual(['propC']);
+		expect(reflect.getProperties(PropertyFilter.Own).map(p => p.name)).toEqual(['propA', 'propB']);
 	});
 
 	it('can create instances', function() {

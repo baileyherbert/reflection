@@ -6,7 +6,43 @@ function ClassMeta(metadataKey: any, metadataValue: any) {
 
 function MethodMeta(metadataKey: any, metadataValue: any) {
 	return function(target: Object, propertyKey: string | symbol) {
+		if (propertyKey in target) {
+			Reflect.metadata(metadataKey, metadataValue)(target, propertyKey);
+		}
+		else {
+			throw new Error(
+				`Could not set method metadata on ${target.constructor.name}.${propertyKey.toString()}: ` +
+				`no such method exists on the prototype`
+			);
+		}
+	};
+}
+
+function PropertyMeta(metadataKey: any, metadataValue: any) {
+	return function(target: Object, propertyKey: string | symbol) {
+		// Make sure this is actually a propert
+		if (propertyKey in target) {
+			throw new Error(
+				`Could not set property metadata on ${target.constructor.name}.${propertyKey.toString()}: ` +
+				`property '${propertyKey.toString()}' is a method`
+			);
+		}
+
 		Reflect.metadata(metadataKey, metadataValue)(target, propertyKey);
+
+		// Property metadata is stored in the same manner as methods
+		// We can find all methods by looking at the prototype, but that won't work for properties
+		// So we'll need to maintain metadata on the class for known property names
+
+		const properties = Reflect.getOwnMetadata('reflection:properties', target.constructor) ?? new Set();
+
+		if (!properties.has(propertyKey)) {
+			properties.add(propertyKey);
+
+			if (properties.size === 1) {
+				Reflect.metadata('reflection:properties', properties)(target.constructor);
+			}
+		}
 	};
 }
 
@@ -38,6 +74,9 @@ let AutoMeta = function(metadataKey: any, metadataValue: any): MetaReturnType {
 		}
 		else if (propertyKey === undefined) {
 			ClassMeta(metadataKey, metadataValue)(target as Function);
+		}
+		else if (!(propertyKey in target)) {
+			PropertyMeta(metadataKey, metadataValue)(target, propertyKey);
 		}
 		else {
 			MethodMeta(metadataKey, metadataValue)(target, propertyKey);
@@ -76,7 +115,12 @@ interface MetaDecorator {
 	 * @param metadataKey The key to set
 	 * @param metadataValue The value to set
 	 */
-	Parameter: typeof ParameterMeta
+	Parameter: typeof ParameterMeta,
+
+	/**
+	 * A metadata decorator that can only be applied to properties.
+	 */
+	Property: typeof PropertyMeta
 }
 
 /**
@@ -95,6 +139,7 @@ export const Meta: MetaDecorator = Object.assign(
 	{ Class: ClassMeta },
 	{ Method: MethodMeta },
 	{ Parameter: ParameterMeta },
+	{ Property: PropertyMeta }
 );
 
 interface MetaReturnType {

@@ -1,6 +1,8 @@
 import { Type } from '@baileyherbert/types';
 import { MethodFilter } from '../enums/MethodFilter';
+import { PropertyFilter } from '../enums/PropertyFilter';
 import { ReflectionMethod } from './ReflectionMethod';
+import { ReflectionProperty } from './ReflectionProperty';
 
 // @ts-ignore
 const isBrowser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
@@ -29,6 +31,11 @@ export class ReflectionClass<T = unknown> {
 	 * Internal cache for methods.
 	 */
 	private _methods?: Map<string, ReflectionMethod<T>>;
+
+	/**
+	 * Internal cache for properties.
+	 */
+	private _properties?: Map<string, ReflectionProperty<T>>;
 
 	/**
 	 * Constructs a new `ReflectionClass` object for the given class constructor.
@@ -158,6 +165,83 @@ export class ReflectionClass<T = unknown> {
 	 */
 	public getConstructorMethod(): ReflectionMethod<T> {
 		return this.getMethod('constructor')!;
+	}
+
+	/**
+	 * Returns the properties in this class.
+	 *
+	 * @param filter Optional filter(s) for the properties to return.
+	 * @returns An array of `ReflectionProperty` instances.
+	 */
+	public getProperties(filter?: PropertyFilter): ReflectionProperty<T>[] {
+		if (this._properties === undefined) {
+			const properties = new Map<string, ReflectionProperty<T>>();
+
+			// Add properties from the prototype
+			for (const propertyName of [...this.getMetadata('reflection:properties') ?? []]) {
+				const property = new ReflectionProperty<T>(this, propertyName, this._constructor.prototype);
+				properties.set(propertyName, property);
+			}
+
+			// Add properties from parent classes
+			if (this._parent !== undefined) {
+				for (const property of this._parent.getProperties()) {
+					if (!properties.has(property.name)) {
+						properties.set(property.name, property);
+					}
+				}
+			}
+
+			this._properties = properties;
+		}
+
+		// Apply filters
+		if (filter !== undefined) {
+			return [...this._properties.values()].filter(prop => {
+				let flags: PropertyFilter = 0;
+
+				flags |= prop.isTyped ? PropertyFilter.Typed : 0;
+				flags |= prop.class === this ? PropertyFilter.Own : PropertyFilter.Inherited;
+
+				return (flags & filter) > 0;
+			});
+		}
+
+		return [...this._properties.values()];
+	}
+
+	/**
+	 * Returns `true` if the class contains a property with the specified name.
+	 *
+	 * @param name The name of the property (case sensitive).
+	 * @param filter Optional filter for property matching.
+	 * @returns Whether or not there is a property with that name.
+	 */
+	public hasProperty(name: string, filter?: PropertyFilter): boolean {
+		for (const prop of this.getProperties(filter)) {
+			if (prop.name === name) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns a property from the class.
+	 *
+	 * @param name The name of the property (case sensitive).
+	 * @param filter Optional filter for property matching.
+	 * @returns The `ReflectionProperty` instance for the specified property or `undefined` if not found.
+	 */
+	public getProperty(name: string, filter?: PropertyFilter): ReflectionProperty<T> | undefined {
+		for (const prop of this.getProperties(filter)) {
+			if (prop.name === name) {
+				return prop;
+			}
+		}
+
+		return;
 	}
 
 	/**

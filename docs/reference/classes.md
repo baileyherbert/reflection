@@ -24,7 +24,7 @@ const reflect = new ReflectionClass(new ExampleClass());
 
 > A reference to the underlying class constructor.
 
-## Managing methods
+## Retrieving methods
 
 ### `#!ts getMethods(filter?: MethodFilter)` { data-toc-label="getMethods()", id="method:getMethods" }
 
@@ -101,6 +101,77 @@ reflect.hasMethod('staticMethodName', MethodFilter.Local) // false
 // These return the same exact object
 reflect.getConstructorMethod();
 reflect.getMethod('constructor');
+```
+
+## Retrieving properties
+
+!!! warning
+	Due to the way property metadata is stored, properties will not be visible to reflection unless you use the
+	[`@Meta()`](../decorators/Meta.md#variation:smart) or [`@Meta.Property()`](../decorators/Meta.md#variation:property)
+	decorators in some way.
+
+	This is because, while property metadata is stored in the same way as methods, there is no way to iterate over
+	properties on the prototype like you can with methods. This means there's no way for reflection to identify what
+	properties exist.
+
+	To get around this problem, the `@Meta` decorators store a set of known property names on the class under the
+	`reflection:properties` key.
+
+### `#!ts getProperties(filter?: PropertyFilter)` { data-toc-label="getProperties()", id="method:getProperties" }
+
+> Returns an array of [`ReflectionProperty`](properties.md) instances that describe each known property on the class.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name     | Type                                                        | Description                                                        | Default     |
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------ | ----------- |
+| `filter` | [`PropertyFilter`](../enums/PropertyFilter.md), `undefined` | An optional filter to choose what kind of properties are returned. | `undefined` |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+// Iterate over all properties
+for (const property of reflect.getProperties()) {}
+```
+```ts
+// Filter own properties (not from a parent class)
+const ownProperties = reflect.getProperties(PropertyFilter.Own);
+```
+
+### `#!ts getProperty(name: string, filter?: PropertyFilter)` { data-toc-label="getProperty()", id="method:getProperty" }
+
+> Returns the [`ReflectionProperty`](properties.md) instance for a property matching the given name. Returns `undefined`
+> when no matching property is found.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name     | Type                                                        | Description                                                       | Default     |
+| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
+| `name`   | `string`                                                    | The name of the property to search for.                           | *required*  |
+| `filter` | [`PropertyFilter`](../enums/PropertyFilter.md), `undefined` | An optional filter to choose what kind of properties are checked. | `undefined` |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+const property = reflect.getProperty('propertyName');
+const value = property?.getMetadata('key');
+```
+
+### `#!ts hasProperty(name: string, filter?: PropertyFilter)` { data-toc-label="hasProperty()", id="method:hasProperty" }
+
+> Returns `true` if the class has a property matching the given name.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name     | Type                                                        | Description                                                      | Default     |
+| -------- | ----------------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `name`   | `string`                                                    | The name of the property to search for.                          | *required*  |
+| `filter` | [`PropertyFilter`](../enums/PropertyFilter.md), `undefined` | An optional filter to use when checking for a matching property. | `undefined` |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+reflect.hasProperty('propertyName')
 ```
 
 ## Managing metadata

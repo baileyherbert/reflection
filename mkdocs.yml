@@ -58,12 +58,14 @@ nav:
   - Reference:
     - Classes: reference/classes.md
     - Methods: reference/methods.md
+    - Properties: reference/properties.md
     - Parameters: reference/parameters.md
   - Decorators:
     - Meta: decorators/Meta.md
     - Reflectable: decorators/Reflectable.md
   - Enums:
     - MethodFilter: enums/MethodFilter.md
+    - PropertyFilter: enums/PropertyFilter.md
     - ParameterFilter: enums/ParameterFilter.md
 
 plugins:

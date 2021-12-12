@@ -3,8 +3,8 @@
 ## Welcome!
 
 This is the documentation for [`@baileyherbert/reflection`](https://npmjs.com/@baileyherbert/reflection). This library
-allows you to perform reflection at runtime for classes, methods, and parameters. It also makes it simple to work with
-metadata as well as return and parameter types.
+allows you to perform reflection at runtime for classes, methods, properties, and parameters. It also makes it simple
+to work with metadata and design types.
 
 ```ts
 import { ReflectionClass } from '@baileyherbert/reflection';
@@ -16,15 +16,16 @@ const reflect = new ReflectionClass(ClassName);
 const instance = reflect.create(...args);
 
 // Manage class metadata
-// These are available for methods and parameters too!
+// These are available for methods, parameters, and properties too!
 reflect.hasMetadata('key');
 reflect.getMetadata('key');
 
-// Get information about methods
+// Get methods
 reflect.getMethods().map(method => method.name);
-
-// And about parameters!
 reflect.getMethod('constructor').getParameters().map(param => param.getType());
+
+// Get properties
+reflect.getProperties().filter(prop => prop.hasMetadata('example'));
 ```
 
 ## Getting started
