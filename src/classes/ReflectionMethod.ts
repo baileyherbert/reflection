@@ -228,7 +228,20 @@ export class ReflectionMethod<T = unknown> {
 	 * @param filter Optional filter(s) for the parameters to check.
 	 * @returns The `ReflectionParameter` instance for the specified parameter or `undefined` if not found.
 	 */
-	public getParameter(name: string, filter?: ParameterFilter): ReflectionParameter<T> | undefined {
+	public getParameter(name: string, filter?: ParameterFilter): ReflectionParameter<T> | undefined;
+
+	/**
+	 * Returns the parameter at the specified index.
+	 *
+	 * @param index The zero-based index to retrieve.
+	 * @returns The `ReflectionParameter` instance for the specified parameter or `undefined` if not found.
+	 */
+	public getParameter(index: number): ReflectionParameter<T> | undefined;
+	public getParameter(name: string | number, filter?: ParameterFilter): ReflectionParameter<T> | undefined {
+		if (typeof name === 'number') {
+			return this.getParameters()[name];
+		}
+
 		for (const param of this.getParameters(filter)) {
 			if (param.name === name) {
 				return param;

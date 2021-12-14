@@ -62,6 +62,11 @@ describe('ReflectionMethod', function() {
 		expect(calculateLengthMethod.hasParameter('doesNotExist')).toBe(false);
 
 		expect(calculateLengthMethod.getParameter('input')).toBe(params[0]);
+
+		expect(calculateLengthMethod.getParameter(0)?.name).toBe('input');
+		expect(calculateLengthMethod.getParameter(1)?.name).toBe('max');
+		expect(calculateLengthMethod.getParameter(2)?.name).toBe('unused');
+		expect(calculateLengthMethod.getParameter(3)).toBe(undefined);
 	});
 
 	it('can filter parameters', function() {

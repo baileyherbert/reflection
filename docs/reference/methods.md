@@ -113,7 +113,7 @@ const knownNonPrimitives = reflect.getMethods(
 );
 ```
 
-### `#!ts getParameter(name: string, filter?: ParameterFilter)` { data-toc-label="getParameter()", id="method:getParameter" }
+### `#!ts getParameter(name: string, filter?: ParameterFilter)` { data-toc-label="getParameter(name, [filter])", id="method:getParameter" }
 
 > Returns a [`ReflectionParameter`](parameters.md) instance for the specified parameter. Returns `undefined` if there
 > is no matching parameter.
@@ -129,6 +129,23 @@ const knownNonPrimitives = reflect.getMethods(
 >
 ```ts
 const param = method.getParameter('paramName');
+```
+
+### `#!ts getParameter(index: number)` { data-toc-label="getParameter(index)", id="method:getParameter:index" }
+
+> Returns a [`ReflectionParameter`](parameters.md) instance for the parameter at the specified index. Returns
+> `undefined` if there is no matching parameter.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name     | Type                                                          | Description                                                       | Default     |
+| -------- | ------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
+| `index`  | `number`                                                      | The index to retrieve (zero-based).                               | *required*  |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+const param = method.getParameter(0);
 ```
 
 ### `#!ts hasParameter(name: string, filter?: ParameterFilter)` { data-toc-label="hasParameter()", id="method:hasParameter" }
