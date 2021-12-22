@@ -1,6 +1,7 @@
 import { Type } from '@baileyherbert/types';
 import { MethodFilter } from '../enums/MethodFilter';
 import { PropertyFilter } from '../enums/PropertyFilter';
+import { isConstructor } from '../utilities/types';
 import { ReflectionMethod } from './ReflectionMethod';
 import { ReflectionProperty } from './ReflectionProperty';
 
@@ -352,7 +353,14 @@ export class ReflectionClass<T = unknown> {
 	 * @param args
 	 */
 	public create(args: any[] = []) {
-		return new this._constructor(...args);
+		if (isConstructor(this._constructor)) {
+			return new this._constructor(...args);
+		}
+		else {
+			throw new Error(
+				`Cannot create an instance of class ${this.name} because it is not a constructor`
+			);
+		}
 	}
 
 	/**
