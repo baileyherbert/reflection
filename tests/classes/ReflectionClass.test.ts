@@ -8,7 +8,7 @@ describe('ReflectionClass', function() {
 
 	it('matches expected prototype', function() {
 		expect(reflect).toBeInstanceOf(ReflectionClass);
-		expect(reflect.ref).toBe(ChildClass);
+		expect(reflect.target).toBe(ChildClass);
 		expect(reflect.name).toBe('ChildClass');
 	});
 

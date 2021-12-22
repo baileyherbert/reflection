@@ -93,7 +93,7 @@ export class ReflectionMethod<T = unknown> {
 			throw new Error('Cannot call local method without specifying a target object');
 		}
 
-		if (!(object instanceof this.class.ref)) {
+		if (!(object instanceof this.class.target)) {
 			throw new Error('Attempt to call local method on an object from a different type');
 		}
 
@@ -132,7 +132,7 @@ export class ReflectionMethod<T = unknown> {
 	 */
 	public get isStatic() {
 		// @ts-ignore
-		return typeof this.class.ref[this.name] === 'function' && !this.isConstructor;
+		return typeof this.class.target[this.name] === 'function' && !this.isConstructor;
 	}
 
 	/**

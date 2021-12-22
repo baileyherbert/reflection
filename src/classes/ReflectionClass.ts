@@ -313,7 +313,7 @@ export class ReflectionClass<T = unknown> {
 	 */
 	public hasType(type: Type<any>) {
 		for (const $class of this.getHierarchy()) {
-			if ($class.ref === type) {
+			if ($class.target === type) {
 				return true;
 			}
 		}
@@ -329,7 +329,7 @@ export class ReflectionClass<T = unknown> {
 	 */
 	public hasAncestorType(type: Type<any>) {
 		for (const $class of this.getHierarchy().slice(0, -1)) {
-			if ($class.ref === type) {
+			if ($class.target === type) {
 				return true;
 			}
 		}
@@ -366,6 +366,15 @@ export class ReflectionClass<T = unknown> {
 	/**
 	 * The constructor function for the class.
 	 */
+	public get target() {
+		return this._constructor;
+	}
+
+	/**
+	 * The constructor function for the class.
+	 *
+	 * @deprecated Use `target` instead
+	 */
 	public get ref() {
 		return this._constructor;
 	}
@@ -394,7 +403,7 @@ export class ReflectionClass<T = unknown> {
 	private [customInspectSymbol](depth: number, opts: object) {
 		return {
 			name: this.name,
-			ref: this.ref,
+			ref: this.target,
 			parent: this.parent,
 			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
 			methods: this.getMethods()
