@@ -78,130 +78,141 @@ export abstract class Attribute<T extends Object = Object> {
 	 */
 	public static create<T extends IAttributeConstructor>(attribute: T): IAttribute<T> {
 		return Object.assign(function(...args: any[]) {
+			const apply = function(...decorationArgs: any[]) {
+				let instance = new attribute(...args);
+				let returned: any;
+				let name: string;
+
+				// Parameters
+				if (typeof decorationArgs[2] === 'number') {
+					const [prototype, methodName, parameterIndex] = decorationArgs;
+
+					const ref = new ReflectionClass(prototype.constructor);
+					const reflection = ref.getMethod(methodName)?.getParameter(parameterIndex);
+
+					name = `parameter ${ref.name}::${methodName}[${parameterIndex}]`;
+
+					if (!reflection) {
+						throw new Error(
+							`Failed to build reflection on ${name} for attribute ${attribute.name}`
+						);
+					}
+
+					let parameters = Reflect.getOwnMetadata('reflection:params', prototype, methodName);
+
+					if (parameters === undefined) {
+						parameters = new Array<Map<any, any>>();
+						Reflect.defineMetadata('reflection:params', parameters, prototype, methodName);
+					}
+
+					if (!(parameterIndex in parameters)) {
+						parameters[parameterIndex] = new Map();
+					}
+
+					returned = instance.onParameter({
+						prototype,
+						methodName,
+						parameterIndex,
+						reflection
+					});
+
+					attributes._registerParameterAttribute(prototype, methodName, parameterIndex, instance);
+				}
+
+				// Classes
+				else if (typeof decorationArgs[1] === 'undefined') {
+					const [constructor] = decorationArgs;
+
+					name = `class ${constructor.name}`;
+					returned = instance.onClass({
+						constructor,
+						reflection: new ReflectionClass(constructor)
+					});
+
+					attributes._registerClassAttribute(constructor, instance);
+				}
+
+				// Properties
+				else if (typeof decorationArgs[1] !== 'undefined' && !(decorationArgs[1] in decorationArgs[0])) {
+					const [prototype, propertyName] = decorationArgs;
+
+					const properties = Reflect.getOwnMetadata('reflection:properties', prototype.constructor)
+						?? new Set();
+
+					if (!properties.has(propertyName)) {
+						properties.add(propertyName);
+
+						if (properties.size === 1) {
+							Reflect.metadata('reflection:properties', properties)(prototype.constructor);
+						}
+					}
+
+					const ref = new ReflectionClass(prototype.constructor);
+					const reflection = ref.getProperty(decorationArgs[1]);
+
+					name = `property ${ref.name}::${propertyName}`;
+
+					if (!reflection) {
+						throw new Error(
+							`Failed to build reflection on ${name} for attribute ${attribute.name}`
+						);
+					}
+
+					returned = instance.onProperty({
+						prototype,
+						propertyName,
+						reflection
+					});
+
+					attributes._registerPropertyAttribute(prototype, propertyName, instance);
+				}
+
+				// Methods
+				else {
+					const [prototype, methodName] = decorationArgs;
+
+					const ref = new ReflectionClass(prototype.constructor);
+					const reflection = ref.getMethod(methodName);
+
+					name = `method ${ref.name}::${methodName}`;
+
+					if (!reflection) {
+						throw new Error(
+							`Failed to build reflection on ${name} for attribute ${attribute.name}`
+						);
+					}
+
+					returned = instance.onMethod({
+						prototype,
+						methodName,
+						reflection
+					});
+
+					attributes._registerMethodAttribute(prototype, methodName, instance);
+				}
+
+				// Check if the returned value is NO_IMPL
+				// If it is, then the attribute doesn't support that type of decoration
+				if (returned === NO_IMPL && ATTR_OPTIONS.emitInvalidUsageErrors) {
+					throw new Error(`Attribute ${attribute.name} cannot be applied to ${name}`);
+				}
+			}
+
 			if (new.target) {
 				return new attribute(...args);
 			}
-			else {
-				return function(...decorationArgs: any[]) {
-					let instance = new attribute(...args);
-					let returned: any;
-					let name: string;
+			else if (isDecoratorCall(args)) {
+				const ref = new ReflectionClass(attribute);
+				const method = ref.getConstructorMethod();
 
-					// Parameters
-					if (typeof decorationArgs[2] === 'number') {
-						const [prototype, methodName, parameterIndex] = decorationArgs;
-
-						const ref = new ReflectionClass(prototype.constructor);
-						const reflection = ref.getMethod(methodName)?.getParameter(parameterIndex);
-
-						name = `parameter ${ref.name}::${methodName}[${parameterIndex}]`;
-
-						if (!reflection) {
-							throw new Error(
-								`Failed to build reflection on ${name} for attribute ${attribute.name}`
-							);
-						}
-
-						let parameters = Reflect.getOwnMetadata('reflection:params', prototype, methodName);
-
-						if (parameters === undefined) {
-							parameters = new Array<Map<any, any>>();
-							Reflect.defineMetadata('reflection:params', parameters, prototype, methodName);
-						}
-
-						if (!(parameterIndex in parameters)) {
-							parameters[parameterIndex] = new Map();
-						}
-
-						returned = instance.onParameter({
-							prototype,
-							methodName,
-							parameterIndex,
-							reflection
-						});
-
-						attributes._registerParameterAttribute(prototype, methodName, parameterIndex, instance);
-					}
-
-					// Classes
-					else if (typeof decorationArgs[1] === 'undefined') {
-						const [constructor] = decorationArgs;
-
-						name = `class ${constructor.name}`;
-						returned = instance.onClass({
-							constructor,
-							reflection: new ReflectionClass(constructor)
-						});
-
-						attributes._registerClassAttribute(constructor, instance);
-					}
-
-					// Properties
-					else if (typeof decorationArgs[1] !== 'undefined' && !(decorationArgs[1] in decorationArgs[0])) {
-						const [prototype, propertyName] = decorationArgs;
-
-						const properties = Reflect.getOwnMetadata('reflection:properties', prototype.constructor)
-							?? new Set();
-
-						if (!properties.has(propertyName)) {
-							properties.add(propertyName);
-
-							if (properties.size === 1) {
-								Reflect.metadata('reflection:properties', properties)(prototype.constructor);
-							}
-						}
-
-						const ref = new ReflectionClass(prototype.constructor);
-						const reflection = ref.getProperty(decorationArgs[1]);
-
-						name = `property ${ref.name}::${propertyName}`;
-
-						if (!reflection) {
-							throw new Error(
-								`Failed to build reflection on ${name} for attribute ${attribute.name}`
-							);
-						}
-
-						returned = instance.onProperty({
-							prototype,
-							propertyName,
-							reflection
-						});
-
-						attributes._registerPropertyAttribute(prototype, propertyName, instance);
-					}
-
-					// Methods
-					else {
-						const [prototype, methodName] = decorationArgs;
-
-						const ref = new ReflectionClass(prototype.constructor);
-						const reflection = ref.getMethod(methodName);
-
-						name = `method ${ref.name}::${methodName}`;
-
-						if (!reflection) {
-							throw new Error(
-								`Failed to build reflection on ${name} for attribute ${attribute.name}`
-							);
-						}
-
-						returned = instance.onMethod({
-							prototype,
-							methodName,
-							reflection
-						});
-
-						attributes._registerMethodAttribute(prototype, methodName, instance);
-					}
-
-					// Check if the returned value is NO_IMPL
-					// If it is, then the attribute doesn't support that type of decoration
-					if (returned === NO_IMPL && ATTR_OPTIONS.emitInvalidUsageErrors) {
-						throw new Error(`Attribute ${attribute.name} cannot be applied to ${name}`);
-					}
+				if (method.getParameters().length === 0) {
+					const originalArgs = args;
+					args = [];
+					return apply(...originalArgs);
 				}
 			}
+
+			return apply;
 		}, {
 			_constructor: attribute
 		}) as any;
@@ -261,7 +272,19 @@ export type IAttributeParameterDecorator<T = any> = {
 /**
  * Defines a wrapped attribute that can be both invoked as a decorator and instantiated like a class constructor.
  */
-export interface IAttribute<T extends IAttributeConstructor> {
+export type IAttribute<T extends IAttributeConstructor> =
+	IAttributeCallable<T> &
+	IAttributeShortCallable<T>;
+
+type IAttributeShortCallable<T extends IAttributeConstructor> =
+	IClassWithoutParenthesis<T> &
+	IMethodWithoutParenthesis<T> &
+	IPropertyWithoutParenthesis<T> &
+	IParameterWithoutParenthesis<T>;
+
+interface IAttributeCallable<T extends IAttributeConstructor> {
+	new(...args: IAttributeArgs<T>): IAttributeClass<T>;
+
 	(...args: IAttributeArgs<T>): UnionToIntersection<NonNullable<
 		(IfAny<ReturnType<IAttributeClass<T>['onClass']>, null, IAttributeClassDecorator<IAttributeType<T>>>) |
 		(IfAny<ReturnType<IAttributeClass<T>['onMethod']>, null, IAttributeMethodDecorator<IAttributeType<T>>>) |
@@ -269,14 +292,28 @@ export interface IAttribute<T extends IAttributeConstructor> {
 		(IfAny<ReturnType<IAttributeClass<T>['onParameter']>, null, IAttributeParameterDecorator<IAttributeType<T>>>)
 	>>;
 
-	new(...args: IAttributeArgs<T>): IAttributeClass<T>;
-
 	/**
 	 * The attribute's underlying constructor.
 	 * @internal
 	 */
 	_constructor: IAttributeConstructor;
 }
+
+type IClassWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
+	IfAny<ReturnType<IAttributeClass<T>['onClass']>, {}, { (constructor: Constructor<IAttributeType<T>>): void; }>
+	: {}
+
+type IMethodWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
+	IfAny<ReturnType<IAttributeClass<T>['onMethod']>, {}, { (prototype: IAttributeType<T>, methodName: string, descriptor: TypedPropertyDescriptor<Delegate<any>>): void; }>
+	: {}
+
+type IPropertyWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
+	IfAny<ReturnType<IAttributeClass<T>['onProperty']>, {}, { (prototype: IAttributeType<T>, propertyName: string, descriptor: void): void; }>
+	: {}
+
+type IParameterWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
+	IfAny<ReturnType<IAttributeClass<T>['onParameter']>, {}, { (prototype: IAttributeType<T>, methodName: string, parameterIndex: number): void; }>
+	: {}
 
 /**
  * Describes an instance of an attribute's underlying class with the decoration methods hidden.
@@ -298,3 +335,28 @@ export type IAttributeInstance<T extends IAttribute<any>> = (T extends IAttribut
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type UnionToIntersection<U> = (U extends any ? (argument: U) => void : never) extends
 	(argument: infer I) => void ? I : never;
+
+/**
+ * Returns true if the given arguments are for a decorator.
+ *
+ * @param args
+ */
+function isDecoratorCall(args: any[]) {
+	if (typeof args[0] === 'function' && args[0].hasOwnProperty('prototype')) {
+		return true;
+	}
+
+	if (typeof args[0] === 'object' && args[0].hasOwnProperty('constructor')) {
+		if (typeof args[1] === 'string') {
+			if (typeof args[2] === 'number' || typeof args[2] === 'undefined') {
+				return true;
+			}
+
+			if (typeof args[2] === 'object' && args[2].hasOwnProperty('enumerable') && args[2].hasOwnProperty('value')) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
