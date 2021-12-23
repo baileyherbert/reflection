@@ -1,4 +1,5 @@
 import { ReflectionClass } from '../../src/main';
+import { TestAttribute, TestAttributeImpl } from '../artifacts/attributes/TestAttribute';
 import { ChildClass } from '../artifacts/ChildClass';
 import { ParentClass } from '../artifacts/ParentClass';
 
@@ -70,5 +71,16 @@ describe('ReflectionParameter', function() {
 		inputParam.setMetadata('someNumber', 456);
 		expect(inputParam.hasMetadata('someNumber')).toBe(true);
 		expect(inputParam.getMetadata('someNumber')).toBe(456);
+	});
+
+	it('can retrieve attributes', function() {
+		const method = reflect.getMethod('attrMethodTest')!;
+		const param = method.getParameter('param')!;
+
+		expect(typeof param.getAttribute(TestAttribute)).toBe('object');
+		expect(param.getAttribute(TestAttribute)?.constructor).toBe(TestAttributeImpl);
+		expect(param.getAttribute(TestAttribute)?.getValue()).toBe(8);
+		expect(param.getAttributes(TestAttribute).length).toBe(2);
+		expect(param.getAttributes().length).toBe(2);
 	});
 });

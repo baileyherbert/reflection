@@ -178,6 +178,46 @@ const value = property?.getMetadata('key');
 reflect.hasProperty('propertyName')
 ```
 
+## Retrieving attributes
+
+This library has a powerful alternative to decorators called [attributes](attributes.md). You can use the following
+methods to retrieve attribute instances that have been applied to a class.
+
+### `#!ts getAttributes(attribute?: IAttribute<any>)` { data-toc-label="getAttributes()", id="method:getAttributes" }
+
+> Returns an array of instances of the specified attribute on the class.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name        | Type                   | Description                            | Default    |
+| ----------- | ---------------------- | -------------------------------------- | ---------- |
+| `attribute` | `#!ts IAttribute<any>` | A reference to the attribute function. | *required* |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+for (const attribute of reflect.getAttributes(ExampleAttribute)) {
+	// Do something
+}
+```
+
+### `#!ts getAttribute(attribute?: IAttribute<any>)` { data-toc-label="getAttribute()", id="method:getAttribute" }
+
+> Returns an instance of the specified attribute on the class or `undefined` if not found. Only the last instance
+> (the instance declared in the code last) will be returned.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name        | Type                   | Description                            | Default    |
+| ----------- | ---------------------- | -------------------------------------- | ---------- |
+| `attribute` | `#!ts IAttribute<any>` | A reference to the attribute function. | *required* |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+const latest = reflect.getAttributes(ExampleAttribute);
+```
+
 ## Managing metadata
 
 These methods use the `reflect-metadata` library under the hood. You can use the [`@Meta`](../decorators/Meta.md)

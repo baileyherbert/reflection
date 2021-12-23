@@ -1,6 +1,7 @@
-import { Type } from '@baileyherbert/types';
+import { Constructor, Type } from '@baileyherbert/types';
 import { MethodFilter } from '../enums/MethodFilter';
 import { PropertyFilter } from '../enums/PropertyFilter';
+import { attributes, IAttribute, IAttributeInstance } from '../main';
 import { isConstructor } from '../utilities/types';
 import { ReflectionMethod } from './ReflectionMethod';
 import { ReflectionProperty } from './ReflectionProperty';
@@ -243,6 +244,30 @@ export class ReflectionClass<T = unknown> {
 		}
 
 		return;
+	}
+
+	/**
+	 * Returns all attributes on the class.
+	 */
+	public getAttributes(): IAttributeInstance<any>[];
+
+	/**
+	 * Returns all attributes of the specified type on the class.
+	 *
+	 * @param attribute
+	 */
+	public getAttributes<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T>[];
+	public getAttributes(attribute?: IAttribute<any>) {
+		return attributes.getFromClass(this._constructor, attribute!);
+	}
+
+	/**
+	 * Returns the last attribute of the specified type on the class.
+	 *
+	 * @param attribute
+	 */
+	public getAttribute<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T> | undefined {
+		return attributes.getFromClass(this._constructor, attribute).shift();
 	}
 
 	/**

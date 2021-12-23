@@ -60,6 +60,7 @@ nav:
     - Methods: reference/methods.md
     - Properties: reference/properties.md
     - Parameters: reference/parameters.md
+    - Attributes: reference/attributes.md
   - Decorators:
     - Meta: decorators/Meta.md
     - Reflectable: decorators/Reflectable.md

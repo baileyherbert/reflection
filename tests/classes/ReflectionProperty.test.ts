@@ -1,4 +1,5 @@
 import { ReflectionClass } from '../../src/main';
+import { TestAttribute, TestAttributeImpl } from '../artifacts/attributes/TestAttribute';
 import { ChildClass } from '../artifacts/ChildClass';
 
 describe('ReflectionProperty', function() {
@@ -38,5 +39,15 @@ describe('ReflectionProperty', function() {
 		propA.setMetadata('written', true);
 		expect(propA.hasMetadata('written')).toBe(true);
 		expect(propA.getMetadata('written')).toBe(true);
+	});
+
+	it('can retrieve attributes', function() {
+		const prop = reflect.getProperty('propB')!;
+
+		expect(typeof prop.getAttribute(TestAttribute)).toBe('object');
+		expect(prop.getAttribute(TestAttribute)?.constructor).toBe(TestAttributeImpl);
+		expect(prop.getAttribute(TestAttribute)?.getValue()).toBe(4);
+		expect(prop.getAttributes(TestAttribute).length).toBe(2);
+		expect(prop.getAttributes().length).toBe(2);
 	});
 });

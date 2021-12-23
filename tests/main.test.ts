@@ -10,6 +10,8 @@ describe('main', function() {
 		expect(typeof Main.MethodFilter).toBe('object');
 		expect(typeof Main.PropertyFilter).toBe('object');
 		expect(typeof Main.ParameterFilter).toBe('object');
+		expect(typeof Main.Attribute).toBe('function');
+		expect(typeof Main.attributes).toBe('object');
 	})
 
 	it('exports the meta decorator', function() {

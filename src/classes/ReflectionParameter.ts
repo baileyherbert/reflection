@@ -1,3 +1,4 @@
+import { attributes, IAttribute, IAttributeInstance } from '../main';
 import { ExtractedParameter } from '../utilities/ParameterParser';
 import { ReflectionMethod } from './ReflectionMethod';
 
@@ -135,6 +136,30 @@ export class ReflectionParameter<T = unknown> {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns all attributes on the parameter.
+	 */
+	public getAttributes(): IAttributeInstance<any>[];
+
+	/**
+	 * Returns all attributes of the specified type on the parameter.
+	 *
+	 * @param attribute
+	 */
+	public getAttributes<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T>[];
+	public getAttributes(attribute?: IAttribute<any>) {
+		return attributes.getFromParameter(this.method.prototype, this.method.name, this.index, attribute!);
+	}
+
+	/**
+	 * Returns the last attribute of the specified type on the parameter.
+	 *
+	 * @param attribute
+	 */
+	public getAttribute<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T> | undefined {
+		return attributes.getFromParameter(this.method.prototype, this.method.name, this.index, attribute).shift();
 	}
 
 	/**

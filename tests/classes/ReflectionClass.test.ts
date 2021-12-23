@@ -1,4 +1,5 @@
 import { MethodFilter, PropertyFilter, ReflectionClass } from '../../src/main';
+import { TestAttribute, TestAttributeImpl } from '../artifacts/attributes/TestAttribute';
 import { ChildClass } from '../artifacts/ChildClass';
 import { ParentClass } from '../artifacts/ParentClass';
 
@@ -126,5 +127,13 @@ describe('ReflectionClass', function() {
 		expect(reflect.create().someRandomValue).toBe('Not provided');
 
 		expect(reflect.parent?.create()).toBeInstanceOf(ParentClass);
+	});
+
+	it('can retrieve attributes', function() {
+		expect(typeof reflect.getAttribute(TestAttribute)).toBe('object');
+		expect(reflect.getAttribute(TestAttribute)?.constructor).toBe(TestAttributeImpl);
+		expect(reflect.getAttribute(TestAttribute)?.getValue()).toBe(2);
+		expect(reflect.getAttributes(TestAttribute).length).toBe(2);
+		expect(reflect.getAttributes().length).toBe(2);
 	});
 });

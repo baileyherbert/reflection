@@ -1,4 +1,5 @@
 import { ParameterFilter } from '../enums/ParameterFilter';
+import { attributes, IAttribute, IAttributeInstance } from '../main';
 import { ParameterParser } from '../utilities/ParameterParser';
 import { ReflectionClass } from './ReflectionClass';
 import { ReflectionParameter } from './ReflectionParameter';
@@ -294,6 +295,30 @@ export class ReflectionMethod<T = unknown> {
 		}
 
 		return params[index].size > 0;
+	}
+
+	/**
+	 * Returns all attributes on the method.
+	 */
+	public getAttributes(): IAttributeInstance<any>[];
+
+	/**
+	 * Returns all attributes of the specified type on the method.
+	 *
+	 * @param attribute
+	 */
+	public getAttributes<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T>[];
+	public getAttributes(attribute?: IAttribute<any>) {
+		return attributes.getFromMethod(this._proto, this.name, attribute!);
+	}
+
+	/**
+	 * Returns the last attribute of the specified type on the method.
+	 *
+	 * @param attribute
+	 */
+	public getAttribute<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T> | undefined {
+		return attributes.getFromMethod(this._proto, this.name, attribute).shift();
 	}
 
 	/**

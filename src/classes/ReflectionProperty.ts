@@ -1,3 +1,4 @@
+import { attributes, IAttribute, IAttributeInstance } from '../main';
 import { ReflectionClass } from './ReflectionClass';
 
 // @ts-ignore
@@ -86,6 +87,30 @@ export class ReflectionProperty<T = unknown> {
 		}
 
 		return 'object';
+	}
+
+	/**
+	 * Returns all attributes on the property.
+	 */
+	public getAttributes(): IAttributeInstance<any>[];
+
+	/**
+	 * Returns all attributes of the specified type on the property.
+	 *
+	 * @param attribute
+	 */
+	public getAttributes<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T>[];
+	public getAttributes(attribute?: IAttribute<any>) {
+		return attributes.getFromProperty(this._proto, this.name, attribute!);
+	}
+
+	/**
+	 * Returns the last attribute of the specified type on the property.
+	 *
+	 * @param attribute
+	 */
+	public getAttribute<T extends IAttribute<any>>(attribute: T): IAttributeInstance<T> | undefined {
+		return attributes.getFromProperty(this._proto, this.name, attribute).shift();
 	}
 
 	/**
