@@ -272,17 +272,19 @@ export type IAttributeParameterDecorator<T = any> = {
 /**
  * Defines a wrapped attribute that can be both invoked as a decorator and instantiated like a class constructor.
  */
-export type IAttribute<T extends IAttributeConstructor> =
+export type IAttribute<T extends IAttributeConstructor> = IAttributeDefined<T,
 	IAttributeCallable<T> &
-	IAttributeShortCallable<T>;
-
-type IAttributeShortCallable<T extends IAttributeConstructor> =
 	IClassWithoutParenthesis<T> &
 	IMethodWithoutParenthesis<T> &
 	IPropertyWithoutParenthesis<T> &
-	IParameterWithoutParenthesis<T>;
+	IParameterWithoutParenthesis<T>,
+	never
+>;
 
-interface IAttributeCallable<T extends IAttributeConstructor> {
+/**
+ * Defines a final attribute function that can be both called as a decorator and instantiated as an object.
+ */
+export interface IAttributeCallable<T extends IAttributeConstructor> {
 	new(...args: IAttributeArgs<T>): IAttributeClass<T>;
 
 	(...args: IAttributeArgs<T>): UnionToIntersection<NonNullable<
@@ -298,6 +300,16 @@ interface IAttributeCallable<T extends IAttributeConstructor> {
 	 */
 	_constructor: IAttributeConstructor;
 }
+
+/**
+ * Defines whether an attribute has any applicable targets or not.
+ */
+export type IAttributeDefined<T extends IAttributeConstructor, Y, N> = NonNullable<(
+	IfAny<ReturnType<IAttributeClass<T>['onClass']>, null, true> |
+	IfAny<ReturnType<IAttributeClass<T>['onMethod']>, null, true> |
+	IfAny<ReturnType<IAttributeClass<T>['onProperty']>, null, true> |
+	IfAny<ReturnType<IAttributeClass<T>['onParameter']>, null, true>
+)> extends never ? N : Y;
 
 type IClassWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
 	IfAny<ReturnType<IAttributeClass<T>['onClass']>, {}, { (constructor: Constructor<IAttributeType<T>>): void; }>
