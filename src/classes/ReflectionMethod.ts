@@ -1,5 +1,6 @@
 import { ParameterFilter } from '../enums/ParameterFilter';
-import { attributes, IAttribute, IAttributeInstance } from '../main';
+import { IAttribute, IAttributeInstance } from '../attributes/Attribute';
+import { attributes } from '../attributes/AttributeRegistry';
 import { ParameterParser } from '../utilities/ParameterParser';
 import { ReflectionClass } from './ReflectionClass';
 import { ReflectionParameter } from './ReflectionParameter';

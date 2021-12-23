@@ -1,4 +1,5 @@
-import { attributes, IAttribute, IAttributeInstance } from '../main';
+import { IAttribute, IAttributeInstance } from '../attributes/Attribute';
+import { attributes } from '../attributes/AttributeRegistry';
 import { ReflectionClass } from './ReflectionClass';
 
 // @ts-ignore

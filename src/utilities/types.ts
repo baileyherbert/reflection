@@ -6,7 +6,7 @@ import { Constructor } from '@baileyherbert/types';
  * @param value
  * @returns
  */
- export function isConstructor(value: unknown): value is Constructor<any> {
+export function isConstructor(value: unknown): value is Constructor<any> {
 	return (
 		typeof value === 'function' &&
 		value.hasOwnProperty('prototype') &&

@@ -1,4 +1,5 @@
-import { attributes, IAttribute, IAttributeInstance } from '../main';
+import { IAttribute, IAttributeInstance } from '../attributes/Attribute';
+import { attributes } from '../attributes/AttributeRegistry';
 import { ExtractedParameter } from '../utilities/ParameterParser';
 import { ReflectionMethod } from './ReflectionMethod';
 

@@ -1,4 +1,4 @@
-import { Constructor, Type } from '@baileyherbert/types';
+import { Type } from '@baileyherbert/types';
 import { Attribute, IAttribute, IAttributeConstructor, IAttributeInstance } from './Attribute';
 
 class AttributeRegistry {

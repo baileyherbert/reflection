@@ -1,7 +1,8 @@
-import { Constructor, Type } from '@baileyherbert/types';
+import { Type } from '@baileyherbert/types';
 import { MethodFilter } from '../enums/MethodFilter';
 import { PropertyFilter } from '../enums/PropertyFilter';
-import { attributes, IAttribute, IAttributeInstance } from '../main';
+import { IAttribute, IAttributeInstance } from '../attributes/Attribute';
+import { attributes } from '../attributes/AttributeRegistry';
 import { isConstructor } from '../utilities/types';
 import { ReflectionMethod } from './ReflectionMethod';
 import { ReflectionProperty } from './ReflectionProperty';
