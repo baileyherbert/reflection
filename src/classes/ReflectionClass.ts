@@ -380,6 +380,13 @@ export class ReflectionClass<T = unknown> {
 	}
 
 	/**
+	 * The prototype of the class.
+	 */
+	public get prototype() {
+		return this._constructor.prototype;
+	}
+
+	/**
 	 * The name of the class.
 	 */
 	public get name() {

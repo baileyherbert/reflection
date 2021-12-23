@@ -63,6 +63,13 @@ export class ReflectionMethod<T = unknown> {
 	}
 
 	/**
+	 * The prototype that the method is defined on.
+	 */
+	public get prototype() {
+		return this._proto;
+	}
+
+	/**
 	 * Returns the prototype function for this method.
 	 *
 	 * @returns
