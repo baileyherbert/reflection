@@ -5,7 +5,7 @@ ATTR_OPTIONS.emitInvalidUsageErrors = false;
 describe('Attribute', function() {
 	describe('Decorator type checking', function() {
 		it('Can be both invoked and constructed', function() {
-			class ExampleAttr extends Attribute {}
+			class ExampleAttr extends Attribute { override onClass(event: AttributeClassEvent<Object>) {} }
 			const Attr = Attribute.create(ExampleAttr);
 
 			expect(new Attr()).toBeInstanceOf(ExampleAttr);

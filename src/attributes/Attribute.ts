@@ -304,12 +304,12 @@ export interface IAttributeCallable<T extends IAttributeConstructor> {
 /**
  * Defines whether an attribute has any applicable targets or not.
  */
-export type IAttributeDefined<T extends IAttributeConstructor, Y, N> = NonNullable<(
+export type IAttributeDefined<T extends IAttributeConstructor, Y, N> = IfAny<T, Y, NonNullable<(
 	IfAny<ReturnType<IAttributeClass<T>['onClass']>, null, true> |
 	IfAny<ReturnType<IAttributeClass<T>['onMethod']>, null, true> |
 	IfAny<ReturnType<IAttributeClass<T>['onProperty']>, null, true> |
 	IfAny<ReturnType<IAttributeClass<T>['onParameter']>, null, true>
-)> extends never ? N : Y;
+)> extends never ? N : Y>;
 
 type IClassWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
 	IfAny<ReturnType<IAttributeClass<T>['onClass']>, {}, { (constructor: Constructor<IAttributeType<T>>): void; }>
