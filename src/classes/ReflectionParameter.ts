@@ -164,6 +164,15 @@ export class ReflectionParameter<T = unknown> {
 	}
 
 	/**
+	 * Returns true if the parameter has an attribute of the specified type.
+	 *
+	 * @param attribute
+	 */
+	public hasAttribute<T extends IAttribute<any>>(attribute: T) {
+		return attributes.hasFromParameter(this.method.prototype, this.method.name, this.index, attribute);
+	}
+
+	/**
 	 * Returns the metadata map for this parameter or `undefined` if there is no metadata for this parameter.
 	 *
 	 * @returns

@@ -74,13 +74,14 @@ methods to retrieve attribute instances that have been applied to a parameter.
 
 ### `#!ts getAttributes(attribute?: IAttribute<any>)` { data-toc-label="getAttributes()", id="method:getAttributes" }
 
-> Returns an array of instances of the specified attribute on the parameter.
+> Returns an array of instances of the specified attribute on the parameter. When the `attribute` argument is not
+> supplied, it will return all attributes on the parameter.
 >
 > <div class="ref-head">**:octicons-package-16: Parameters**</div>
 >
-| Name        | Type                   | Description                            | Default    |
-| ----------- | ---------------------- | -------------------------------------- | ---------- |
-| `attribute` | `#!ts IAttribute<any>` | A reference to the attribute function. | *required* |
+| Name        | Type                   | Description                            | Default     |
+| ----------- | ---------------------- | -------------------------------------- | ----------- |
+| `attribute` | `#!ts IAttribute<any>` | A reference to the attribute function. | `undefined` |
 >
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
 >
@@ -90,7 +91,7 @@ for (const attribute of parameter.getAttributes(ExampleAttribute)) {
 }
 ```
 
-### `#!ts getAttribute(attribute?: IAttribute<any>)` { data-toc-label="getAttribute()", id="method:getAttribute" }
+### `#!ts getAttribute(attribute: IAttribute<any>)` { data-toc-label="getAttribute()", id="method:getAttribute" }
 
 > Returns an instance of the specified attribute on the parameter or `undefined` if not found. Only the last instance
 > (the instance declared in the code last) will be returned.
@@ -105,6 +106,24 @@ for (const attribute of parameter.getAttributes(ExampleAttribute)) {
 >
 ```ts
 const latest = parameter.getAttributes(ExampleAttribute);
+```
+
+### `#!ts hasAttribute(attribute: IAttribute<any>)` { data-toc-label="hasAttribute()", id="method:hasAttribute" }
+
+> Returns true if the parameter has any attributes of the specified type applied.
+>
+> <div class="ref-head">**:octicons-package-16: Parameters**</div>
+>
+| Name        | Type                   | Description                            | Default    |
+| ----------- | ---------------------- | -------------------------------------- | ---------- |
+| `attribute` | `#!ts IAttribute<any>` | A reference to the attribute function. | *required* |
+>
+> <div class="ref-head">**:octicons-star-16: Examples**</div>
+>
+```ts
+if (parameter.hasAttributes(ExampleAttribute)) {
+	// Do something!
+}
 ```
 
 ## Managing metadata

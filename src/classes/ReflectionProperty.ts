@@ -115,6 +115,15 @@ export class ReflectionProperty<T = unknown> {
 	}
 
 	/**
+	 * Returns true if the property has an attribute of the specified type.
+	 *
+	 * @param attribute
+	 */
+	public hasAttribute<T extends IAttribute<any>>(attribute: T) {
+		return attributes.hasFromProperty(this._proto, this.name, attribute);
+	}
+
+	/**
 	 * Returns the value of metadata for the property under the specified key.
 	 *
 	 * @param name

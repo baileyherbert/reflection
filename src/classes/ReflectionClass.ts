@@ -272,6 +272,15 @@ export class ReflectionClass<T = unknown> {
 	}
 
 	/**
+	 * Returns true if the class has an attribute of the specified type.
+	 *
+	 * @param attribute
+	 */
+	public hasAttribute<T extends IAttribute<any>>(attribute: T) {
+		return attributes.hasFromClass(this._constructor, attribute);
+	}
+
+	/**
 	 * Returns the value of metadata for the class under the specified key.
 	 *
 	 * @param name

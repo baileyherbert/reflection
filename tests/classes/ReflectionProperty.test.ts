@@ -1,4 +1,4 @@
-import { ReflectionClass } from '../../src/main';
+import { Attribute, AttributeClassEvent, ReflectionClass } from '../../src/main';
 import { TestAttribute, TestAttributeImpl } from '../artifacts/attributes/TestAttribute';
 import { ChildClass } from '../artifacts/ChildClass';
 
@@ -49,5 +49,12 @@ describe('ReflectionProperty', function() {
 		expect(prop.getAttribute(TestAttribute)?.getValue()).toBe(4);
 		expect(prop.getAttributes(TestAttribute).length).toBe(2);
 		expect(prop.getAttributes().length).toBe(2);
+
+		const FakeAttribute = Attribute.create(class extends Attribute {
+			public override onClass(event: AttributeClassEvent<Object>) { }
+		});
+
+		expect(prop.hasAttribute(TestAttribute)).toBe(true);
+		expect(prop.hasAttribute(FakeAttribute)).toBe(false);
 	});
 });

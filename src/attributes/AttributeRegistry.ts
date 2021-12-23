@@ -156,6 +156,26 @@ class AttributeRegistry {
 	}
 
 	/**
+	 * Returns true if the given class has an attribute of the specified type.
+	 *
+	 * @param constructor
+	 * @param attribute
+	 */
+	public hasFromClass(constructor: Type<any>, attribute: IAttribute<any>) {
+		const attributes = this.classes.get(constructor);
+
+		if (attributes) {
+			for (const attr of attributes) {
+				if (attr.constructor === attribute._constructor) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns all attributes on the given method.
 	 *
 	 * @param prototype
@@ -181,6 +201,27 @@ class AttributeRegistry {
 		}
 
 		return attributes;
+	}
+
+	/**
+	 * Returns true if the given method has an attribute of the specified type.
+	 *
+	 * @param prototype
+	 * @param methodName
+	 * @param attribute
+	 */
+	public hasFromMethod(prototype: Object, methodName: string, attribute: IAttribute<any>) {
+		const attributes = this.methods.get(prototype)?.get(methodName);
+
+		if (attributes) {
+			for (const attr of attributes) {
+				if (attr.constructor === attribute._constructor) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -213,6 +254,28 @@ class AttributeRegistry {
 		return attributes;
 	}
 
+	/**
+	 * Returns true if the given parameter has an attribute of the specified type.
+	 *
+	 * @param prototype
+	 * @param methodName
+	 * @param parameterIndex
+	 * @param attribute
+	 */
+	public hasFromParameter(prototype: Object, methodName: string, parameterIndex: number, attribute: IAttribute<any>) {
+		const attributes = this.parameters.get(prototype)?.get(methodName)?.get(parameterIndex);
+
+		if (attributes) {
+			for (const attr of attributes) {
+				if (attr.constructor === attribute._constructor) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * Returns all attributes on the given property.
@@ -240,6 +303,27 @@ class AttributeRegistry {
 		}
 
 		return attributes;
+	}
+
+	/**
+	 * Returns true if the given property has an attribute of the specified type.
+	 *
+	 * @param prototype
+	 * @param propertyName
+	 * @param attribute
+	 */
+	public hasFromProperty(prototype: Object, propertyName: string, attribute: IAttribute<any>) {
+		const attributes = this.properties.get(prototype)?.get(propertyName);
+
+		if (attributes) {
+			for (const attr of attributes) {
+				if (attr.constructor === attribute._constructor) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

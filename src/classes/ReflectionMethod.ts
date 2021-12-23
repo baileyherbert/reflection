@@ -349,6 +349,15 @@ export class ReflectionMethod<T = unknown> {
 	}
 
 	/**
+	 * Returns true if the method has an attribute of the specified type.
+	 *
+	 * @param attribute
+	 */
+	public hasAttribute<T extends IAttribute<any>>(attribute: T) {
+		return attributes.hasFromMethod(this._proto, this.name, attribute);
+	}
+
+	/**
 	 * Returns the value of metadata for the method under the specified key.
 	 *
 	 * @param name

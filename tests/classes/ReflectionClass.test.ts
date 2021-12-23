@@ -1,4 +1,4 @@
-import { MethodFilter, PropertyFilter, ReflectionClass } from '../../src/main';
+import { Attribute, AttributeClassEvent, MethodFilter, PropertyFilter, ReflectionClass } from '../../src/main';
 import { TestAttribute, TestAttributeImpl } from '../artifacts/attributes/TestAttribute';
 import { ChildClass } from '../artifacts/ChildClass';
 import { ParentClass } from '../artifacts/ParentClass';
@@ -135,5 +135,12 @@ describe('ReflectionClass', function() {
 		expect(reflect.getAttribute(TestAttribute)?.getValue()).toBe(2);
 		expect(reflect.getAttributes(TestAttribute).length).toBe(2);
 		expect(reflect.getAttributes().length).toBe(2);
+
+		const FakeAttribute = Attribute.create(class extends Attribute {
+			public override onClass(event: AttributeClassEvent<Object>) { }
+		});
+
+		expect(reflect.hasAttribute(TestAttribute)).toBe(true);
+		expect(reflect.hasAttribute(FakeAttribute)).toBe(false);
 	});
 });
