@@ -9,10 +9,16 @@ export class ParameterParser {
 	 * This parser is pretty simple but it should account for all edge cases and correctly parse parameters 100% of
 	 * the time, unlike any regex alternatives out there.
 	 *
+	 * You can pass an optional `methodName` for filtering. This is mainly useful for finding the constructor. If there
+	 * is no matching method name, `false` is returned.
+	 *
 	 * @param input
+	 * @param methodName
 	 * @returns
 	 */
-	public static parse(input: string) {
+	public static parse(input: string): ExtractedParameter[];
+	public static parse(input: string, methodName: string): ExtractedParameter[] | false;
+	public static parse(input: string, methodName?: string) {
 		const params = new Array<ExtractedParameter>();
 
 		let parenthesisDepth = 0;
@@ -25,8 +31,20 @@ export class ParameterParser {
 		let name = '';
 		let hasDefault = false;
 
+		let hasMatchingMethod = false;
+		let previousWord = '';
+		let currentWord = '';
+
 		const push = () => {
 			if (name.length) {
+				if (typeof methodName === 'string' && !hasMatchingMethod) {
+					if (previousWord !== methodName) {
+						return;
+					}
+
+					hasMatchingMethod = true;
+				}
+
 				params.push({
 					index: params.length,
 					name,
@@ -38,6 +56,13 @@ export class ParameterParser {
 			}
 		};
 
+		const flushWord = () => {
+			if (currentWord !== '') {
+				previousWord = currentWord;
+				currentWord = '';
+			}
+		};
+
 		for (let charIndex = 0; charIndex < input.length; charIndex++) {
 			const char = input[charIndex];
 			const nextChar = input[charIndex + 1];
@@ -46,28 +71,29 @@ export class ParameterParser {
 			if (!stringActive) {
 				// Ignore whitespace
 				if (/\s/.test(char)) {
+					flushWord();
 					continue;
 				}
 
 				// Track opening parenthesis
 				if (char === '(') {
+					flushWord();
 					parenthesisDepth += 1;
 				}
 
 				// Track closing parenthesis
 				else if (char === ')') {
+					flushWord();
 					parenthesisDepth -= 1;
 
 					// Once we go back to 0, we're done with the function's parameters
 					if (parenthesisDepth === 0) {
 						push();
-						break;
-					}
-				}
 
-				// Skip until we enter the parameters
-				if (parenthesisDepth === 0) {
-					continue;
+						if (hasMatchingMethod || typeof methodName !== 'string') {
+							break;
+						}
+					}
 				}
 
 				// Handle block comments
@@ -84,6 +110,15 @@ export class ParameterParser {
 				// Handle line comments
 				else if (char === '/' && nextChar === '/') {
 					charIndex = input.indexOf('\n', charIndex);
+				}
+
+				// Skip until we enter the parameters
+				if (parenthesisDepth === 0) {
+					if (/[a-zA-Z_$]/.test(char)) {
+						currentWord += char;
+					}
+
+					continue;
 				}
 
 				// Handle strings
@@ -133,6 +168,10 @@ export class ParameterParser {
 					stringActive = false;
 				}
 			}
+		}
+
+		if (typeof methodName === 'string' && !hasMatchingMethod) {
+			return false;
 		}
 
 		return params;

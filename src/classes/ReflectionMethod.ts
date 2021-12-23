@@ -191,6 +191,33 @@ export class ReflectionMethod<T = unknown> {
 	}
 
 	/**
+	 * Parses parameters from the method's definition. For the constructor method, it walks up until it finds a
+	 * constructor method (it also uses slower parsing to pick out the constructor from the class definition).
+	 *
+	 * @returns
+	 */
+	protected parseParameters() {
+		if (this.name === 'constructor') {
+			const chain = this.class.getHierarchy().reverse();
+
+			for (const target of chain) {
+				const func = Function.toString.call(target.prototype.constructor);
+				const result = ParameterParser.parse(func, 'constructor');
+
+				if (result !== false) {
+					return result;
+				}
+			}
+
+			return [];
+		}
+		else {
+			const func = Function.toString.call(this.getFunction());
+			return ParameterParser.parse(func);
+		}
+	}
+
+	/**
 	 * Returns the parameters for this method.
 	 *
 	 * @param filter Optional filter(s) for the parameters to return.
@@ -198,8 +225,7 @@ export class ReflectionMethod<T = unknown> {
 	 */
 	public getParameters(filter?: ParameterFilter): ReflectionParameter<T>[] {
 		if (this._parameters === undefined) {
-			const func = Function.toString.call(this.getFunction());
-			const schema = ParameterParser.parse(func);
+			const schema = this.parseParameters();
 			const params = new Array<ReflectionParameter<T>>();
 
 			for (const item of schema) {
