@@ -18,7 +18,7 @@ export const ATTR_OPTIONS = {
 	emitInvalidUsageErrors: true
 };
 
-export interface Attribute<T extends Object = Object> {
+export interface Attribute<T extends Object = Object, D = any> {
 	/**
 	 * @internal
 	 */
@@ -28,7 +28,7 @@ export interface Attribute<T extends Object = Object> {
 /**
  * The base class for an attribute decorator.
  */
-export abstract class Attribute<T extends Object = Object> {
+export abstract class Attribute<T extends Object = Object, D = any> {
 
 	/**
 	 * Invoked when the attribute is applied to a class.
@@ -44,7 +44,7 @@ export abstract class Attribute<T extends Object = Object> {
 	 *
 	 * @param event An object containing details about the event.
 	 */
-	public onMethod(event: AttributeMethodEvent<T>): any {
+	public onMethod(event: AttributeMethodEvent<T, D>): any {
 		return NO_IMPL;
 	}
 
@@ -169,7 +169,7 @@ export abstract class Attribute<T extends Object = Object> {
 
 				// Methods
 				else {
-					const [prototype, methodName] = decorationArgs;
+					const [prototype, methodName, descriptor] = decorationArgs;
 
 					const ref = new ReflectionClass(prototype.constructor);
 					const reflection = ref.getMethod(methodName);
@@ -185,7 +185,8 @@ export abstract class Attribute<T extends Object = Object> {
 					returned = instance.onMethod({
 						prototype,
 						methodName,
-						reflection
+						reflection,
+						descriptor
 					});
 
 					attributes._registerMethodAttribute(prototype, methodName, instance);
@@ -242,6 +243,12 @@ export type IAttributeType<T extends IAttributeConstructor> = T extends new (...
 	A : never;
 
 /**
+ * Defines the generic `<D>` type of an attribute, which constrains the types of methods it can be applied to.
+ */
+export type IAttributeMethodType<T extends IAttributeConstructor> = T extends new (...args: any[]) => Attribute<any, infer A> ?
+	A : never;
+
+/**
  * Defines a class decorator.
  */
 export type IAttributeClassDecorator<T = any> = {
@@ -250,9 +257,11 @@ export type IAttributeClassDecorator<T = any> = {
 
 /**
  * Defines a method decorator.
+ *
+ * @template D The function signature that methods must match.
  */
-export type IAttributeMethodDecorator<T = any> = {
-	(prototype: T, methodName: string, descriptor: TypedPropertyDescriptor<Delegate<any>>): void;
+export type IAttributeMethodDecorator<T = any, D = any> = {
+	(prototype: T, methodName: string, descriptor: TypedPropertyDescriptor<D>): void;
 }
 
 /**
@@ -289,7 +298,7 @@ export interface IAttributeCallable<T extends IAttributeConstructor> {
 
 	(...args: IAttributeArgs<T>): UnionToIntersection<NonNullable<
 		(IfAny<ReturnType<IAttributeClass<T>['onClass']>, null, IAttributeClassDecorator<IAttributeType<T>>>) |
-		(IfAny<ReturnType<IAttributeClass<T>['onMethod']>, null, IAttributeMethodDecorator<IAttributeType<T>>>) |
+		(IfAny<ReturnType<IAttributeClass<T>['onMethod']>, null, IAttributeMethodDecorator<IAttributeType<T>, IAttributeMethodType<T>>>) |
 		(IfAny<ReturnType<IAttributeClass<T>['onProperty']>, null, IAttributePropertyDecorator<IAttributeType<T>>>) |
 		(IfAny<ReturnType<IAttributeClass<T>['onParameter']>, null, IAttributeParameterDecorator<IAttributeType<T>>>)
 	>>;
@@ -316,7 +325,7 @@ type IClassWithoutParenthesis<T extends IAttributeConstructor> = T extends new (
 	: {}
 
 type IMethodWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
-	IfAny<ReturnType<IAttributeClass<T>['onMethod']>, {}, { (prototype: IAttributeType<T>, methodName: string, descriptor: TypedPropertyDescriptor<Delegate<any>>): void; }>
+	IfAny<ReturnType<IAttributeClass<T>['onMethod']>, {}, { (prototype: IAttributeType<T>, methodName: string, descriptor: TypedPropertyDescriptor<IAttributeMethodType<T>>): void; }>
 	: {}
 
 type IPropertyWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?

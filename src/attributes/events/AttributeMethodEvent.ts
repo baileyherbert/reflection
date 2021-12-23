@@ -1,6 +1,9 @@
 import { ReflectionMethod } from '../../main';
 
-export interface AttributeMethodEvent<T extends Object = Object> {
+/**
+ * @template D The function signature that methods must match.
+ */
+export interface AttributeMethodEvent<T extends Object = Object, D = any> {
 
 	/**
 	 * The prototype where the method is defined.
@@ -16,5 +19,10 @@ export interface AttributeMethodEvent<T extends Object = Object> {
 	 * A reflection instance for the method that the attribute was applied to.
 	 */
 	reflection: ReflectionMethod<T>;
+
+	/**
+	 * The property descriptor from the decorator.
+	 */
+	descriptor: TypedPropertyDescriptor<D>;
 
 }
