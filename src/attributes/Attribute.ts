@@ -228,7 +228,7 @@ export type IAttributeConstructor = new (...args: any[]) => Attribute;
 /**
  * Defines the constructor arguments of an attribute.
  */
-export type IAttributeArgs<T extends IAttributeConstructor> = T extends new (...args: infer A) => Attribute ? A : [];
+export type IAttributeArgs<T extends IAttributeConstructor> = OverloadedArguments<T>;
 
 /**
  * Defines the underlying class of an attribute.
@@ -343,6 +343,48 @@ export type IAttributeInstance<T extends IAttribute<any>> = (T extends IAttribut
 		},
 		'onClass' | 'onMethod' | 'onProperty' | 'onParameter'
 	>): never) & Omit<Attribute<any>, 'onClass' | 'onMethod' | 'onProperty' | 'onParameter'>;
+
+type OverloadedArguments<T> = FixArguments<
+	T extends {
+		new (...args: infer A1): any;
+		new (...args: infer A2): any;
+		new (...args: infer A3): any;
+		new (...args: infer A4): any;
+		new (...args: infer A5): any;
+		new (...args: infer A6): any;
+	} ? FilterArg<A1> | FilterArg<A2> | FilterArg<A3> | FilterArg<A4> | FilterArg<A5> | FilterArg<A6> :
+	T extends {
+		new (...args: infer A1): any;
+		new (...args: infer A2): any;
+		new (...args: infer A3): any;
+		new (...args: infer A4): any;
+		new (...args: infer A5): any;
+	} ? FilterArg<A1> | FilterArg<A2> | FilterArg<A3> | FilterArg<A4> | FilterArg<A5> :
+	T extends {
+		new (...args: infer A1): any;
+		new (...args: infer A2): any;
+		new (...args: infer A3): any;
+		new (...args: infer A4): any
+	} ? FilterArg<A1> | FilterArg<A2> | FilterArg<A3> | FilterArg<A4> :
+	T extends {
+		new (...args: infer A1): any;
+		new (...args: infer A2): any;
+		new (...args: infer A3): any
+	} ? FilterArg<A1> | FilterArg<A2> | FilterArg<A3> :
+	T extends {
+	  	new (...args: infer A1): any;
+	  	new (...args: infer A2): any
+	} ? FilterArg<A1> | FilterArg<A2> :
+	T extends new (...args: infer A) => any ? FilterArg<A> : any>;
+
+/**
+ * This is a utility symbol to fix arguments from `OverloadedArguments<T>`.
+ * The problem is that in some conditions, `unknown[]` will sneak its way into the unions.
+ * This, combined with the two types below it, can reliably filter those out.
+ */
+const Noop: unique symbol = Symbol();
+type FilterArg<T> = unknown[] extends T ? typeof Noop : T;
+type FixArguments<T> = T extends typeof Noop ? never : T;
 
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type UnionToIntersection<U> = (U extends any ? (argument: U) => void : never) extends
