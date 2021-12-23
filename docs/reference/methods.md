@@ -27,6 +27,10 @@ Retrieve an instance from the parent class using [`getMethod()`](classes.md#meth
 
 > Whether or not the method has type metadata available from TypeScript.
 
+### `#!ts prototype: Object` { data-toc-label="prototype", id="property:prototype" }
+
+> A reference to the underlying class prototype.
+
 ## Invoking methods
 
 ### `#!ts getFunction()` { id="method:getFunction" }

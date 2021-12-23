@@ -20,9 +20,13 @@ const reflect = new ReflectionClass(new ExampleClass());
 
 > The reflection instance for the parent class or `undefined` if the class has no parent.
 
-### `#!ts ref: Type<T>` { data-toc-label="type", id="property:ref" }
+### `#!ts target: Type<T>` { data-toc-label="target", id="property:target" }
 
 > A reference to the underlying class constructor.
+
+### `#!ts prototype: Object` { data-toc-label="prototype", id="property:prototype" }
+
+> A reference to the underlying class prototype.
 
 ## Retrieving methods
 
