@@ -255,7 +255,7 @@ const latest = method.getAttributes(ExampleAttribute);
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
 >
 ```ts
-if (method.hasAttributes(ExampleAttribute)) {
+if (method.hasAttribute(ExampleAttribute)) {
 	// Do something!
 }
 ```

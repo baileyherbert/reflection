@@ -102,7 +102,7 @@ const latest = property.getAttributes(ExampleAttribute);
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
 >
 ```ts
-if (property.hasAttributes(ExampleAttribute)) {
+if (property.hasAttribute(ExampleAttribute)) {
 	// Do something!
 }
 ```

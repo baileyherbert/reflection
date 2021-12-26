@@ -121,7 +121,7 @@ const latest = parameter.getAttributes(ExampleAttribute);
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
 >
 ```ts
-if (parameter.hasAttributes(ExampleAttribute)) {
+if (parameter.hasAttribute(ExampleAttribute)) {
 	// Do something!
 }
 ```

@@ -232,7 +232,7 @@ const latest = reflect.getAttributes(ExampleAttribute);
 > <div class="ref-head">**:octicons-star-16: Examples**</div>
 >
 ```ts
-if (reflect.hasAttributes(ExampleAttribute)) {
+if (reflect.hasAttribute(ExampleAttribute)) {
 	// Do something!
 }
 ```
