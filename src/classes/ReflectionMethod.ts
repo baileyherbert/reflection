@@ -440,7 +440,8 @@ export class ReflectionMethod<T = unknown> {
 			returnType: this.getReturnType(),
 			returnTypeString: this.getReturnTypeString(),
 			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
-			parameters: this.getParameters()
+			parameters: this.getParameters(),
+			attributes: this.getAttributes()
 		};
 	}
 

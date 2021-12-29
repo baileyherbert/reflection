@@ -448,7 +448,8 @@ export class ReflectionClass<T = unknown> {
 			target: this.target,
 			parent: this.parent,
 			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
-			methods: this.getMethods()
+			methods: this.getMethods(),
+			attributes: this.getAttributes()
 		};
 	}
 

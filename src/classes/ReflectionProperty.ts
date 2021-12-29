@@ -179,7 +179,8 @@ export class ReflectionProperty<T = unknown> {
 			isTyped: this.isTyped,
 			type: this.getType(),
 			typeString: this.getTypeString(),
-			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v})))
+			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
+			attributes: this.getAttributes()
 		};
 	}
 
