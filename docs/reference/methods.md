@@ -31,19 +31,11 @@ Retrieve an instance from the parent class using [`getMethod()`](classes.md#meth
 
 > A reference to the underlying class prototype.
 
+### `#!ts target: Function` { data-toc-label="target", id="property:target" }
+
+> A reference to the method's function on the class prototype.
+
 ## Invoking methods
-
-### `#!ts getFunction()` { id="method:getFunction" }
-
-> Returns a reference to the method on the class prototype. In most cases, you won't want to use this and should
-> instead use the `invoke()` or `getClosure()` methods.
->
-> <div class="ref-head">**:octicons-star-16: Examples**</div>
->
-```ts
-const fn = method.getFunction();
-fn.call(instance, ...args);
-```
 
 ### `#!ts getClosure(object?: T | null)` { data-toc-label="getClosure()", id="method:getClosure" }
 

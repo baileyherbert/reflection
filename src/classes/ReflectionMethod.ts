@@ -72,8 +72,16 @@ export class ReflectionMethod<T = unknown> {
 	}
 
 	/**
+	 * The function for this method on its prototype.
+	 */
+	public get target() {
+		return this._proto[this.name];
+	}
+
+	/**
 	 * Returns the prototype function for this method.
 	 *
+	 * @deprecated Use `target` instead. This will be removed in a future version.
 	 * @returns
 	 */
 	public getFunction(): Function {
@@ -426,6 +434,7 @@ export class ReflectionMethod<T = unknown> {
 	private [customInspectSymbol](depth: number, opts: object) {
 		return {
 			name: this.name,
+			target: this.target,
 			isTyped: this.isTyped,
 			isStatic: this.isStatic,
 			returnType: this.getReturnType(),
