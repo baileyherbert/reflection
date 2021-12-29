@@ -55,8 +55,10 @@ describe('ReflectionParameter', function() {
 
 		expect(method?.getParameter('test')?.isClassType).toBe(true);
 		expect(method?.getParameter('test')?.getType()).toBe(ParentClass);
+		expect(method?.getParameter('test')?.isReflectableType).toBe(true);
 
 		expect(methodWithoutDecorator?.getParameter('test')?.isClassType).toBe(false);
+		expect(methodWithoutDecorator?.getParameter('test')?.isReflectableType).toBe(false);
 	});
 
 	it('can read metadata', function() {

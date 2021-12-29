@@ -38,6 +38,10 @@ parameter.
 
 > Whether or not the parameter accepts an instance of a class.
 
+### `#!ts isReflectableType: boolean` { data-toc-label="isReflectableType", id="property:isReflectableType" }
+
+> Whether or not the parameter's accepted type is a reflectable user class.
+
 ## Parameter type
 
 ### `#!ts getType()` { id="method:getType" }

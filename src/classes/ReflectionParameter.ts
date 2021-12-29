@@ -140,6 +140,22 @@ export class ReflectionParameter<T = unknown> {
 	}
 
 	/**
+	 * Whether or not the parameter's accepted type is a reflectable user class. This is basically shorthand for
+	 * checking all of the following:
+	 *
+	 * - `isClassType` == true
+	 * - `isKnownType` == true
+	 * - `isPrimitiveType` == false
+	 */
+	public get isReflectableType() {
+		return (
+			this.isClassType === true &&
+			this.isKnownType === true &&
+			this.isPrimitiveType === false
+		);
+	}
+
+	/**
 	 * Returns all attributes on the parameter.
 	 */
 	public getAttributes(): IAttributeInstance<any>[];
