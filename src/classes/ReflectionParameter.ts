@@ -269,6 +269,8 @@ export class ReflectionParameter<T = unknown> {
 			isPrimitiveType: this.isPrimitiveType,
 			isClassType: this.isClassType,
 			isKnownType: this.isKnownType,
+			isReflectableType: this.isReflectableType,
+			hasDefault: this.hasDefault,
 			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v})))
 		};
 	}
