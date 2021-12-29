@@ -445,7 +445,7 @@ export class ReflectionClass<T = unknown> {
 	private [customInspectSymbol](depth: number, opts: object) {
 		return {
 			name: this.name,
-			ref: this.target,
+			target: this.target,
 			parent: this.parent,
 			metadata: Object.assign({}, ...[...this.getAllMetadata().entries()].map(([k, v]) => ({[k]: v}))),
 			methods: this.getMethods()
