@@ -98,5 +98,74 @@ describe('Attribute', function() {
 
 			expect(attributes.getFromClass(Test, Attr).shift()?.value).toBe(5);
 		});
+
+		it('Fire events', function() {
+			class AttrImpl extends Attribute {
+				public override onClass(event: AttributeClassEvent<Object>) {}
+				public override onMethod(event: AttributeMethodEvent<Object, any>) {}
+				public override onParameter(event: AttributeParameterEvent<Object>) {}
+				public override onProperty(event: AttributePropertyEvent<Object>) {}
+			}
+
+			const Attr = Attribute.create(AttrImpl);
+			const totalCounter = jest.fn();
+			const methodCounter = jest.fn();
+			const types = new Array<string>();
+
+			Attr.events.on('attached', (attribute, type) => {
+				totalCounter();
+				types.push(type);
+			});
+
+			Attr.events.on('classAttached', (constructor, attribute) => {
+				methodCounter();
+
+				expect(constructor).toBe(Test);
+				expect(attribute).toBeInstanceOf(AttrImpl);
+			});
+
+			Attr.events.on('methodAttached', (prototype, methodName, descriptor, attribute) => {
+				methodCounter();
+
+				expect(prototype).toBe(Test.prototype);
+				expect(methodName).toBe('method');
+				expect(typeof descriptor).toBe('object');
+				expect(attribute).toBeInstanceOf(AttrImpl);
+			});
+
+			Attr.events.on('propertyAttached', (prototype, propName, attribute) => {
+				methodCounter();
+
+				expect(prototype).toBe(Test.prototype);
+				expect(propName).toBe('prop');
+				expect(attribute).toBeInstanceOf(AttrImpl);
+			});
+
+			Attr.events.on('parameterAttached', (prototype, methodName, parameterIndex, attribute) => {
+				methodCounter();
+
+				expect(prototype).toBe(Test.prototype);
+				expect(methodName).toBe('method');
+				expect(parameterIndex).toBe(0);
+				expect(attribute).toBeInstanceOf(AttrImpl);
+			});
+
+			@Attr
+			class Test {
+				@Attr
+				public prop = true;
+
+				@Attr
+				public method(@Attr param: string) {}
+			}
+
+			expect(totalCounter).toHaveBeenCalledTimes(4);
+			expect(methodCounter).toHaveBeenCalledTimes(4);
+
+			expect(types).toContain('property');
+			expect(types).toContain('parameter');
+			expect(types).toContain('method');
+			expect(types).toContain('class');
+		});
 	});
 });

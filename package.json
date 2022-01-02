@@ -27,6 +27,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"@baileyherbert/events": "^1.0.1",
 		"@baileyherbert/types": "^1.0.1",
 		"reflect-metadata": "^0.1.13"
 	},

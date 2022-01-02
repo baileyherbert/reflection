@@ -1,3 +1,4 @@
+import { EventEmitter } from '@baileyherbert/events';
 import { Constructor, Delegate } from '@baileyherbert/types';
 import { ReflectionClass } from '../main';
 import { attributes } from './AttributeRegistry';
@@ -77,6 +78,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 	 * @returns
 	 */
 	public static create<T extends IAttributeConstructor>(attribute: T): IAttribute<T> {
+		const events = new EventEmitter<AttributeEvents<T>>() as any;
+
 		return Object.assign(function(...args: any[]) {
 			const apply = function(...decorationArgs: any[]) {
 				let instance = new attribute(...args);
@@ -117,6 +120,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 					});
 
 					attributes._registerParameterAttribute(prototype, methodName, parameterIndex, instance);
+					events.emit('parameterAttached', prototype, methodName, parameterIndex, instance);
+					events.emit('attached', instance, 'parameter');
 				}
 
 				// Classes
@@ -130,6 +135,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 					});
 
 					attributes._registerClassAttribute(constructor, instance);
+					events.emit('classAttached', constructor, instance);
+					events.emit('attached', instance, 'class');
 				}
 
 				// Properties
@@ -165,6 +172,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 					});
 
 					attributes._registerPropertyAttribute(prototype, propertyName, instance);
+					events.emit('propertyAttached', prototype, propertyName, instance);
+					events.emit('attached', instance, 'property');
 				}
 
 				// Methods
@@ -190,6 +199,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 					});
 
 					attributes._registerMethodAttribute(prototype, methodName, instance);
+					events.emit('methodAttached', prototype, methodName, descriptor, instance);
+					events.emit('attached', instance, 'method');
 				}
 
 				// Check if the returned value is NO_IMPL
@@ -215,7 +226,8 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 
 			return apply;
 		}, {
-			_constructor: attribute
+			_constructor: attribute,
+			events
 		}) as any;
 	}
 
@@ -308,6 +320,11 @@ export interface IAttributeCallable<T extends IAttributeConstructor> {
 	 * @internal
 	 */
 	_constructor: IAttributeConstructor;
+
+	/**
+	 * An event emitter object that tracks events for this attribute.
+	 */
+	events: EventEmitter<AttributeEvents<T>>;
 }
 
 /**
@@ -398,6 +415,35 @@ type FixArguments<T> = T extends typeof Noop ? never : T;
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N;
 type UnionToIntersection<U> = (U extends any ? (argument: U) => void : never) extends
 	(argument: infer I) => void ? I : never;
+
+type AttachmentType = 'class' | 'method' | 'property' | 'parameter';
+
+type AttributeEvents<T extends IAttributeConstructor> = {
+	/**
+	 * Invoked when the attribute is attached to anything.
+	 */
+	attached: [attribute: IAttributeInstance<IAttribute<T>>, type: AttachmentType];
+
+	/**
+	 * Invoked when the attribute is attached to a class.
+	 */
+	classAttached: [constructor: Constructor<IAttributeType<T>>, attribute: IAttributeInstance<IAttribute<T>>];
+
+	/**
+	 * Invoked when the attribute is attached to a method.
+	 */
+	methodAttached: [prototype: IAttributeType<T>, methodName: string, descriptor: TypedPropertyDescriptor<IAttributeMethodType<T>>, attribute: IAttributeInstance<IAttribute<T>>];
+
+	/**
+	 * Invoked when the attribute is attached to a property.
+	 */
+	propertyAttached: [prototype: IAttributeType<T>, propertyName: string, attribute: IAttributeInstance<IAttribute<T>>];
+
+	/**
+	 * Invoked when the attribute is attached to a method parameter.
+	 */
+	parameterAttached: [prototype: IAttributeType<T>, methodName: string, parameterIndex: number, attribute: IAttributeInstance<IAttribute<T>>];
+};
 
 /**
  * Returns true if the given arguments are for a decorator.
