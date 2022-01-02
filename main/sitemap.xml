@@ -16,6 +16,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.bailey.sh/reflection/main/decorators/attributes/</loc>
+         <lastmod>2022-01-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.bailey.sh/reflection/main/enums/MethodFilter/</loc>
          <lastmod>2022-01-02</lastmod>
          <changefreq>daily</changefreq>
@@ -32,11 +37,6 @@
     </url>
     <url>
          <loc>https://docs.bailey.sh/reflection/main/internals/parameter-metadata/</loc>
-         <lastmod>2022-01-02</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://docs.bailey.sh/reflection/main/reference/attributes/</loc>
          <lastmod>2022-01-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
