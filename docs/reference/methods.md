@@ -195,8 +195,8 @@ if (method.getReturnTypeString() === 'string') {
 
 ## Retrieving attributes
 
-This library has a powerful alternative to decorators called [attributes](attributes.md). You can use the following
-methods to retrieve attribute instances that have been applied to a method.
+This library has a powerful alternative to decorators called [attributes](../decorators/attributes.md). You can use the
+following methods to retrieve attribute instances that have been applied to a method.
 
 ### `#!ts getAttributes(attribute?: IAttribute<any>)` { data-toc-label="getAttributes()", id="method:getAttributes" }
 

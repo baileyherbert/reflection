@@ -118,6 +118,30 @@ class SampleClass {}
 class AnotherClass {}
 ```
 
+## Attachment events
+
+Attribute constructors expose an `events` property which can be used to track attachments.
+
+```ts
+export const Example = Attribute.create(class extends Attribute { });
+
+/**
+ * Track all attachments.
+ */
+Example.events.on('attached', (attribute, type) => {
+	// `attribute` is an instance of our attribute class above
+	// `type` is a string ('class' | 'method' | 'property' | 'parameter')
+});
+
+/**
+ * Track specific types of attachments in detail.
+ */
+Example.events.on('classAttached', (constructor, attribute) => {});
+Example.events.on('methodAttached', (prototype, methodName, descriptor, attribute) => {});
+Example.events.on('propertyAttached', (prototype, propertyName, attribute) => {});
+Example.events.on('parameterAttached', (prototype, methodName, paramIndex, attribute) => {});
+```
+
 ## Registry
 
 This library exports an `attributes` registry where all attribute instances are registered across the application. You
