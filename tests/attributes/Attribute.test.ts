@@ -99,6 +99,33 @@ describe('Attribute', function() {
 			expect(attributes.getFromClass(Test, Attr).shift()?.value).toBe(5);
 		});
 
+		it('Can work without parenthesis when there are no constructor arguments', function() {
+			class AttrImpl extends Attribute {
+				public override onClass(event: AttributeClassEvent<Object>) {}
+				public override onMethod(event: AttributeMethodEvent<Object, any>) {}
+				public override onParameter(event: AttributeParameterEvent<Object>) {}
+				public override onProperty(event: AttributePropertyEvent<Object>) {}
+			}
+
+			const Attr = Attribute.create(AttrImpl);
+
+			@Attr
+			class Test {
+				@Attr
+				public prop = 5;
+
+				@Attr
+				public method(@Attr param: string) {
+
+				}
+			}
+
+			expect(attributes.getFromClass(Test).map(t => t.constructor)).toEqual([AttrImpl]);
+			expect(attributes.getFromMethod(Test.prototype, 'method').map(t => t.constructor)).toEqual([AttrImpl]);
+			expect(attributes.getFromProperty(Test.prototype, 'prop').map(t => t.constructor)).toEqual([AttrImpl]);
+			expect(attributes.getFromParameter(Test.prototype, 'method', 0).map(t => t.constructor)).toEqual([AttrImpl]);
+		});
+
 		it('Fire events', function() {
 			class AttrImpl extends Attribute {
 				public override onClass(event: AttributeClassEvent<Object>) {}
