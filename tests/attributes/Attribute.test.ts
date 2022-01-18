@@ -194,5 +194,19 @@ describe('Attribute', function() {
 			expect(types).toContain('method');
 			expect(types).toContain('class');
 		});
+
+		it('Applies correctly to constructor parameters', function() {
+			class ExampleAttr extends Attribute {
+				public override onParameter(event: AttributeParameterEvent<Object>) {}
+			}
+
+			const Attr = Attribute.create(ExampleAttr);
+
+			class Test {
+				public constructor(@Attr test: string) {}
+			}
+
+			expect(attributes.getFromParameter(Test.prototype, 'constructor', 0)[0]).toBeInstanceOf(ExampleAttr);
+		});
 	});
 });

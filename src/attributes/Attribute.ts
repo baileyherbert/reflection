@@ -88,7 +88,9 @@ export abstract class Attribute<T extends Object = Object, D = any> {
 
 				// Parameters
 				if (typeof decorationArgs[2] === 'number') {
-					const [prototype, methodName, parameterIndex] = decorationArgs;
+					const [prototypeRaw, methodNameRaw, parameterIndex] = decorationArgs;
+					const prototype = methodNameRaw === undefined ? prototypeRaw.prototype : prototypeRaw;
+					const methodName = methodNameRaw ?? 'constructor';
 
 					const ref = new ReflectionClass(prototype.constructor);
 					const reflection = ref.getMethod(methodName)?.getParameter(parameterIndex);
