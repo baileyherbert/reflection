@@ -54,6 +54,13 @@ export class ParameterParser {
 				name = '';
 				hasDefault = false;
 			}
+			else if (typeof methodName === 'string' && !hasMatchingMethod) {
+				if (previousWord !== methodName) {
+					return;
+				}
+
+				hasMatchingMethod = true;
+			}
 		};
 
 		const flushWord = () => {

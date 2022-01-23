@@ -110,6 +110,21 @@ describe('ReflectionClass', function() {
 		expect(params[0].name).toBe('someRandomValue');
 		expect(params[0].getTypeString()).toBe('string');
 		expect(reflect.getConstructorMethod()).toBe(method);
+
+		class Parent {
+			constructor(parentProp: string) {}
+		}
+
+		class Child extends Parent {
+			constructor() {
+				super('');
+			}
+		}
+
+		const ref = new ReflectionClass(Child);
+		const constructor = ref.getConstructorMethod();
+
+		expect(constructor.getParameters().length).toBe(0);
 	});
 
 	it('can retrieve properties', function() {
