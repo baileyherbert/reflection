@@ -63,7 +63,7 @@ describe('ReflectionClass', function() {
 	});
 
 	it('can retrieve methods', function() {
-		expect(reflect.getMethods().length).toBeGreaterThan(0);
+		expect(reflect.getMethods().length).toBe(10);
 
 		expect(reflect.hasMethod('overloadedMethod')).toBe(true);
 		expect(reflect.hasMethod('calculateLength')).toBe(true);
@@ -157,5 +157,39 @@ describe('ReflectionClass', function() {
 
 		expect(reflect.hasAttribute(TestAttribute)).toBe(true);
 		expect(reflect.hasAttribute(FakeAttribute)).toBe(false);
+	});
+
+	it('doesn\'t invoke getters when querying methods', function() {
+		const fn = jest.fn();
+
+		class Parent {
+			get testParent() {
+				fn();
+				return true;
+			}
+
+			static get testParentStatic() {
+				fn();
+				return true;
+			}
+		}
+
+		class Child extends Parent {
+			get testChild() {
+				fn();
+				return true;
+			}
+
+			static get testChildStatic() {
+				fn();
+				return true;
+			}
+		}
+
+		const ref = new ReflectionClass(Child);
+		ref.getMethods();
+		ref.getMethod('test');
+
+		expect(fn).toHaveBeenCalledTimes(0);
 	});
 });

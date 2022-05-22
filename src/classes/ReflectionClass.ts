@@ -82,9 +82,9 @@ export class ReflectionClass<T = unknown> {
 
 			// Add methods from the prototype
 			for (const methodName of Object.getOwnPropertyNames(this._constructor.prototype)) {
-				const proto = this._constructor.prototype[methodName];
+				const descriptor = Object.getOwnPropertyDescriptor(this._constructor.prototype, methodName);
 
-				if (typeof proto === 'function') {
+				if (descriptor && typeof descriptor.value === 'function') {
 					const method = new ReflectionMethod<T>(this, methodName, this._constructor.prototype);
 					methods.set(method.name, method);
 				}
@@ -92,10 +92,9 @@ export class ReflectionClass<T = unknown> {
 
 			// Add methods from the class itself
 			for (const methodName of Object.getOwnPropertyNames(this._constructor)) {
-				// @ts-ignore
-				const proto = this._constructor[methodName];
+				const descriptor = Object.getOwnPropertyDescriptor(this._constructor, methodName);
 
-				if (typeof proto === 'function') {
+				if (descriptor && typeof descriptor.value === 'function') {
 					const method = new ReflectionMethod<T>(this, methodName, this._constructor);
 					methods.set(method.name, method);
 				}
