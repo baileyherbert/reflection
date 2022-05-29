@@ -39,6 +39,8 @@ export class ParameterParser {
 			if (name.length) {
 				if (typeof methodName === 'string' && !hasMatchingMethod) {
 					if (previousWord !== methodName) {
+						name = '';
+						hasDefault = false;
 						return;
 					}
 
