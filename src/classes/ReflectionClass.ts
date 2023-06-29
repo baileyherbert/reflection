@@ -115,7 +115,7 @@ export class ReflectionClass<T = unknown> {
 		// Apply filters
 		if (filter !== undefined) {
 			return [...this._methods.values()].filter(method => {
-				let flags: MethodFilter = 0;
+				let flags: MethodFilter = MethodFilter.None;
 
 				flags |= method.isStatic ? MethodFilter.Static : MethodFilter.Local;
 				flags |= method.isTyped ? MethodFilter.Typed : 0;
@@ -200,7 +200,7 @@ export class ReflectionClass<T = unknown> {
 		// Apply filters
 		if (filter !== undefined) {
 			return [...this._properties.values()].filter(prop => {
-				let flags: PropertyFilter = 0;
+				let flags: PropertyFilter = PropertyFilter.None;
 
 				flags |= prop.isTyped ? PropertyFilter.Typed : 0;
 				flags |= prop.class === this ? PropertyFilter.Own : PropertyFilter.Inherited;

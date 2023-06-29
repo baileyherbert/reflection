@@ -250,7 +250,7 @@ export class ReflectionMethod<T = unknown> {
 		// Apply filters
 		if (filter !== undefined) {
 			return [...this._parameters].filter(param => {
-				let flags: ParameterFilter = 0;
+				let flags: ParameterFilter = ParameterFilter.None;
 
 				flags |= this.hasParameterMeta(param.index) ? ParameterFilter.Meta : 0;
 				flags |= param.hasDefault ? ParameterFilter.WithDefault : ParameterFilter.WithoutDefault;

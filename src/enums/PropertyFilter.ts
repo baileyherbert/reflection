@@ -1,5 +1,10 @@
 export enum PropertyFilter {
 	/**
+	 * Filter properties that have any kind of metadata.
+	 */
+	None = 0,
+
+	/**
 	 * Filter properties that have type metadata available.
 	 */
 	Typed = 1,

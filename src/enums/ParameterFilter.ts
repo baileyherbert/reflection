@@ -1,5 +1,10 @@
 export enum ParameterFilter {
 	/**
+	 * Filter parameters that have any kind of metadata.
+	 */
+	None = 0,
+
+	/**
 	 * Filter parameters that have reflection metadata.
 	 *
 	 * Note that the metadata must be set using this library's `@Meta` or `@Meta.Parameter` decorator, or using a

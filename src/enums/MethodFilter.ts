@@ -1,5 +1,10 @@
 export enum MethodFilter {
 	/**
+	 * Filter methods that have any kind of metadata.
+	 */
+	None = 0,
+
+	/**
 	 * Filter methods that are static.
 	 */
 	Static = 1,
