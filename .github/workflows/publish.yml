@@ -11,16 +11,16 @@ jobs:
     name: Publish to npm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm test
       - run: npm run build
       - id: get_version
-        uses: battila7/get-version-action@v2
+        uses: baileyherbert/version-action@v3
       - name: Set user
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"

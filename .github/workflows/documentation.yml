@@ -21,20 +21,20 @@ jobs:
     if: github.event.repository.fork == false
     steps:
       # Checkout the target ref
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.customRef }}
 
       # Python
       - name: Install python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
 
       # Python dependencies
       - name: Install dependencies
         run: |
-          pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
+          pip install mkdocs-material
           pip install mike
           pip install mkdocs-minify-plugin
 
@@ -51,7 +51,7 @@ jobs:
       # Extract semver information about the current ref
       - id: get_version
         name: Extract semver
-        uses: battila7/get-version-action@v2
+        uses: baileyherbert/version-action@v3
 
       # Extract the current branch name
       - id: extract_branch
