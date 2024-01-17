@@ -88,7 +88,7 @@ jobs:
       - name: Build docs for release
         if: steps.target.outputs.type == 'release'
         run: |
-          mike deploy ${{ steps.target.outputs.name }} latest --update-aliases --no-redirect
+          mike deploy ${{ steps.target.outputs.name }} latest --update-aliases --alias-type=copy
           mike set-default --push latest
 
 env:
