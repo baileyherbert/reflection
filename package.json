@@ -21,8 +21,6 @@
 	],
 	"scripts": {
 		"build": "rimraf dist && tsc",
-		"watch": "rimraf dist && tsc -w",
-		"start": "node dist/main",
 		"test": "jest"
 	},
 	"dependencies": {
