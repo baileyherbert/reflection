@@ -289,7 +289,7 @@ export type IAttributePropertyDecorator<T = any> = {
  * Defines a parameter decorator.
  */
 export type IAttributeParameterDecorator<T = any> = {
-	(prototype: T, methodName: string, parameterIndex: number): void;
+	(prototype: T, methodName: string | undefined, parameterIndex: number): void;
 }
 
 /**
@@ -352,7 +352,7 @@ type IPropertyWithoutParenthesis<T extends IAttributeConstructor> = T extends ne
 	: {}
 
 type IParameterWithoutParenthesis<T extends IAttributeConstructor> = T extends new () => any ?
-	IfAny<ReturnType<IAttributeClass<T>['onParameter']>, {}, { (prototype: IAttributeType<T>, methodName: string, parameterIndex: number): void; }>
+	IfAny<ReturnType<IAttributeClass<T>['onParameter']>, {}, { (prototype: IAttributeType<T>, methodName: string | undefined, parameterIndex: number): void; }>
 	: {}
 
 /**

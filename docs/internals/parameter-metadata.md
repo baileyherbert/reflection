@@ -11,7 +11,7 @@ metadata in the correct structure.
 ```ts
 import { Meta } from '@baileyherbert/reflection';
 
-export function Decorator(target: Object, propertyKey: string | symbol, parameterIndex: number) {
+export function Decorator(target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) {
 	Meta.Parameter('key', 'value')(target, propertyKey, parameterIndex);
 }
 ```
