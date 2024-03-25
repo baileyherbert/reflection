@@ -110,7 +110,7 @@ export class ParameterParser {
 					const commentEndIndex = input.indexOf('*/', charIndex);
 
 					if (commentEndIndex < 0) {
-						throw new Error('Could not find comment end index');
+						break;
 					}
 
 					charIndex = commentEndIndex + 1;
@@ -119,6 +119,10 @@ export class ParameterParser {
 				// Handle line comments
 				else if (char === '/' && nextChar === '/') {
 					charIndex = input.indexOf('\n', charIndex);
+
+					if (charIndex < 0) {
+						break;
+					}
 				}
 
 				// Skip until we enter the parameters
